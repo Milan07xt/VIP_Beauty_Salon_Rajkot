@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | VIP Beauty Salon</title>
+  <meta name="description" content="Manage VIP Beauty Salon services and prices.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.admin-page {
+      min-height: 100vh;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(212, 175, 55, 0.13), transparent 25rem),
+        #111111;
+    }
+
+    .admin-dashboard {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      border-radius: 24px;
+      background: #FAF7F2;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.48);
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--color-border-card);
+    }
+
+    .admin-header-brand,
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-brand-title {
+      color: #111111;
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .admin-content {
+      padding: 28px;
+    }
+
+    .admin-intro {
+      margin-bottom: 24px;
+    }
+
+    .admin-intro h1 {
+      margin-bottom: 6px;
+      font-family: var(--font-serif);
+      font-size: clamp(30px, 4vw, 40px);
+    }
+
+    .admin-intro p {
+      color: var(--color-text-muted);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 22px;
+    }
+
+    .admin-panel,
+    .admin-table-wrap {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 16px;
+      background: #FFFFFF;
+    }
+
+    .admin-panel h2,
+    .admin-table-wrap h2 {
+      margin-bottom: 16px;
+      font-family: var(--font-serif);
+      font-size: 23px;
+    }
+
+    .admin-field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 13px;
+    }
+
+    .admin-field label {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .admin-field input,
+    .admin-field select,
+    .admin-field textarea {
+      width: 100%;
+      border: 1px solid var(--color-border-card);
+      border-radius: 10px;
+      padding: 11px 12px;
+      background: #FFFFFF;
+      color: var(--color-text-dark);
+      font: inherit;
+      outline: none;
+    }
+
+    .admin-field textarea {
+      min-height: 78px;
+      resize: vertical;
+    }
+
+    .admin-field input:focus,
+    .admin-field select:focus,
+    .admin-field textarea:focus {
+      border-color: var(--color-gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+    }
+
+    .admin-form-actions,
+    .admin-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .admin-form-actions {
+      margin-top: 16px;
+    }
+
+    .admin-table-scroll {
+      overflow-x: auto;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--color-border-card);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .admin-table th {
+      color: var(--color-text-muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .admin-action-btn {
+      padding: 7px 10px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 8px;
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .admin-action-btn:hover {
+      border-color: var(--color-gold);
+    }
+
+    .admin-action-btn.delete {
+      color: #A83232;
+    }
+
+    .admin-notice {
+      min-height: 20px;
+      margin-top: 12px;
+      color: #A83232;
+      font-size: 13px;
+    }
+
+    .admin-section-nav {
+      margin: 0 0 22px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .admin-section-select {
+      width: min(320px, 100%);
+      min-height: 48px;
+      padding: 0 42px 0 16px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: var(--color-text-dark);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .admin-section-select:focus {
+      border-color: var(--color-gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14);
+    }
+
+    .admin-content-section[hidden] {
+      display: none;
+    }
+
+    .image-preview {
+      width: 76px;
+      height: 58px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #F1EEE8;
+    }
+
+    .image-upload-preview {
+      display: none;
+      width: 100%;
+      max-height: 140px;
+      margin-top: 8px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #F1EEE8;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    .image-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .admin-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px dashed var(--color-gold, #d4af37);
+      border-radius: 8px;
+      background: rgba(212, 175, 55, 0.08);
+      color: var(--color-text-dark, #29251c);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 160ms ease;
+    }
+
+    .admin-upload-btn:hover {
+      background: rgba(212, 175, 55, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .upload-note {
+      font-size: 11px;
+      color: var(--color-text-muted, #777168);
+    }
+
+    .image-table-thumb {
+      width: 62px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #f1eee8;
+      border: 1px solid rgba(212, 175, 55, 0.22);
+    }
+
+    .image-status {
+      display: inline-block;
+      margin-top: 4px;
+      color: #A83232;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 820px) {
+      body.admin-page {
+        padding: 14px;
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-content,
+      .admin-header {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    body.admin-page {
+      padding: clamp(14px, 3vw, 42px);
+      background:
+        radial-gradient(ellipse at 12% 0%, rgba(212, 175, 55, 0.18), transparent 34rem),
+        radial-gradient(ellipse at 100% 100%, rgba(168, 132, 33, 0.1), transparent 30rem),
+        #171512;
+    }
+
+    .admin-dashboard {
+      width: min(1320px, 100%);
+      border-color: rgba(212, 175, 55, 0.38);
+      border-radius: 28px;
+      box-shadow: 0 36px 100px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      animation: dashboard-arrive 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .admin-header {
+      position: relative;
+      padding: 22px clamp(20px, 3.2vw, 42px);
+      border-bottom-color: rgba(212, 175, 55, 0.2);
+      background: linear-gradient(110deg, #fffdf9, #f8f2e7);
+    }
+
+    .admin-header::after {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+      content: "";
+      opacity: 0.75;
+    }
+
+    .admin-header-brand {
+      transition: transform var(--transition-normal);
+    }
+
+    .admin-header-brand:hover {
+      transform: translateY(-2px);
+    }
+
+    .admin-brand-title {
+      font-size: 25px;
+      letter-spacing: 0.04em;
+    }
+
+    .admin-content {
+      padding: clamp(22px, 4vw, 46px);
+      background:
+        radial-gradient(ellipse at 0% 0%, rgba(212, 175, 55, 0.065), transparent 32rem),
+        #faf7f2;
+    }
+
+    .admin-intro {
+      position: relative;
+      margin-bottom: 28px;
+      padding: 10px 0 12px 20px;
+      border-left: 3px solid var(--color-gold);
+      animation: dashboard-rise 600ms 100ms both;
+    }
+
+    .admin-intro::after {
+      position: absolute;
+      top: -20px;
+      right: 0;
+      width: min(32%, 260px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168, 132, 33, 0.35));
+      content: "";
+    }
+
+    .admin-intro h1 {
+      margin-bottom: 5px;
+      font-size: clamp(32px, 4vw, 46px);
+      letter-spacing: -0.035em;
+    }
+
+    .admin-intro p {
+      max-width: 620px;
+      font-size: 14px;
+    }
+
+    .admin-section-nav {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 12px;
+      border: 1px solid rgba(168, 132, 33, 0.18);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.68);
+      box-shadow: 0 8px 24px rgba(38, 29, 13, 0.045);
+      animation: dashboard-rise 600ms 180ms both;
+    }
+
+    .admin-section-select {
+      width: min(420px, 100%);
+      border-color: rgba(168, 132, 33, 0.28);
+      border-radius: 12px;
+      background: linear-gradient(135deg, #fff, #fffdf8);
+      box-shadow: 0 4px 12px rgba(40, 30, 12, 0.04);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .admin-section-select:hover {
+      border-color: var(--color-gold);
+      transform: translateY(-1px);
+    }
+
+    .admin-grid {
+      grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.65fr);
+      gap: 20px;
+    }
+
+    .admin-panel,
+    .admin-table-wrap {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(18px, 2vw, 26px);
+      border-color: rgba(168, 132, 33, 0.18);
+      border-radius: 18px;
+      box-shadow: 0 12px 34px rgba(45, 34, 15, 0.055);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .admin-panel::before,
+    .admin-table-wrap::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #a88421, #e6ca75, transparent 82%);
+      content: "";
+      opacity: 0.8;
+    }
+
+    .admin-panel:hover,
+    .admin-table-wrap:hover {
+      border-color: rgba(168, 132, 33, 0.34);
+      box-shadow: 0 18px 42px rgba(45, 34, 15, 0.09);
+      transform: translateY(-2px);
+    }
+
+    .admin-panel h2,
+    .admin-table-wrap h2 {
+      font-size: clamp(21px, 2vw, 25px);
+    }
+
+    .admin-field input,
+    .admin-field select,
+    .admin-field textarea {
+      border-color: #e7dfd1;
+      border-radius: 11px;
+      background: #fffefa;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .admin-field input:hover,
+    .admin-field select:hover,
+    .admin-field textarea:hover {
+      border-color: #d3bd7a;
+    }
+
+    .admin-field input:focus,
+    .admin-field select:focus,
+    .admin-field textarea:focus {
+      background: #fff;
+    }
+
+    .admin-form-actions .btn,
+    .admin-header-actions .btn {
+      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .admin-form-actions .btn:hover,
+    .admin-header-actions .btn:hover {
+      box-shadow: 0 7px 18px rgba(40, 30, 12, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .admin-table th {
+      background: #faf6ed;
+    }
+
+    .admin-table tbody tr {
+      animation: dashboard-rise 420ms both;
+      transition: background-color 160ms ease;
+    }
+
+    .admin-table tbody tr:hover {
+      background: #fffaf0;
+    }
+
+    .admin-table tbody tr:nth-child(2) { animation-delay: 35ms; }
+    .admin-table tbody tr:nth-child(3) { animation-delay: 70ms; }
+    .admin-table tbody tr:nth-child(4) { animation-delay: 105ms; }
+    .admin-table tbody tr:nth-child(5) { animation-delay: 140ms; }
+
+    .admin-action-btn {
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .admin-action-btn:hover {
+      box-shadow: 0 4px 10px rgba(40, 30, 12, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .admin-content-section:not([hidden]) {
+      animation: dashboard-rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .image-preview {
+      border: 1px solid rgba(168, 132, 33, 0.16);
+      box-shadow: 0 3px 10px rgba(40, 30, 12, 0.08);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .image-preview:hover {
+      box-shadow: 0 7px 16px rgba(40, 30, 12, 0.16);
+      transform: scale(1.06);
+    }
+
+    @keyframes dashboard-arrive {
+      from { opacity: 0; transform: translateY(18px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes dashboard-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 820px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-panel:hover,
+      .admin-table-wrap:hover {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .admin-header-actions {
+        width: 100%;
+      }
+
+      .admin-header-actions .btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .admin-intro {
+        padding-left: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="admin-dashboard-theme.css">
+</head>
+<body class="admin-page">
+  <main class="admin-dashboard">
+    <header class="admin-header">
+      <a class="admin-header-brand" href="index.html" aria-label="VIP Beauty Salon home">
+        <span class="brand-crest" aria-hidden="true">♛</span>
+        <span>
+          <span class="admin-brand-title">VIP</span><br>
+          <span class="brand-subtitle">ADMIN PORTAL</span>
+        </span>
+      </a>
+      <div class="admin-header-actions">
+        <a class="btn btn-outline-dark btn-sm" href="index.html">View Website</a>
+        <button class="btn btn-outline-dark btn-sm" id="admin-logout" type="button">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <div class="admin-intro">
+        <h1>Admin Dashboard</h1>
+        <p>Manage salon services, prices, offers, gallery and website images.</p>
+      </div>
+
+      <nav class="admin-section-nav" aria-label="Admin dashboard sections">
+        <label class="sr-only" for="admin-section-select">Choose dashboard section</label>
+        <select class="admin-section-select" id="admin-section-select">
+          <option value="services-panel">Professional Beauty Services</option>
+          <option value="offers-panel">Special Offers</option>
+          <option value="gallery-panel">Our Gallery</option>
+          <option value="images-panel">Website Images</option>
+        </select>
+      </nav>
+
+      <section class="admin-content-section" id="services-panel" aria-label="Service management">
+      <div class="admin-grid">
+        <form class="admin-panel" id="admin-service-form">
+          <h2 id="admin-form-title">Add New Service</h2>
+          <input id="admin-service-id" type="hidden">
+          <div class="admin-field">
+            <label for="admin-service-name">Service Name</label>
+            <input id="admin-service-name" type="text" placeholder="e.g. Hair Spa" required>
+          </div>
+          <div class="admin-field">
+            <label for="admin-service-category">Category</label>
+            <select id="admin-service-category" required>
+              <option value="hair">Hair Services</option>
+              <option value="skin">Skin Care</option>
+              <option value="beauty">Beauty Services</option>
+              <option value="hands-feet">Hands & Feet</option>
+              <option value="bridal">Bridal & Special</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label for="admin-service-price">Price</label>
+            <input id="admin-service-price" type="text" placeholder="₹499 or Contact for Price" required>
+          </div>
+          <div class="admin-field">
+            <label for="admin-service-description">Description</label>
+            <textarea id="admin-service-description" placeholder="Service description"></textarea>
+          </div>
+          <div class="admin-field">
+            <label for="admin-service-image-select">Service Image (Drop Down Menu)</label>
+            <select id="admin-service-image-select" class="admin-image-dropdown"></select>
+            <div class="image-upload-row">
+              <label class="admin-upload-btn" for="admin-service-image-file">
+                📁 Upload From Device
+                <input id="admin-service-image-file" type="file" accept="image/*" class="sr-only">
+              </label>
+              <span class="upload-note">Or choose any image file</span>
+            </div>
+            <img class="image-upload-preview" id="admin-service-image-preview" alt="Service image preview">
+          </div>
+          <div class="admin-form-actions">
+            <button class="btn btn-gold btn-sm" type="submit" id="admin-save-button">Add Service</button>
+            <button class="btn btn-outline-dark btn-sm" type="button" id="admin-reset-button">Reset</button>
+          </div>
+          <p class="admin-notice" id="admin-notice" role="status" aria-live="polite"></p>
+        </form>
+
+        <section class="admin-table-wrap" aria-labelledby="manage-services-heading">
+          <h2 id="manage-services-heading">Manage Services</h2>
+          <p class="section-subtitle" id="admin-service-count" style="margin-bottom:16px"></p>
+          <div class="admin-table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Preview</th>
+                  <th>Service</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-services-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      </section>
+
+      <section class="admin-content-section" id="offers-panel" aria-label="Special offer management" hidden>
+        <div class="admin-grid">
+          <form class="admin-panel" id="admin-offer-form">
+            <h2 id="admin-offer-form-title">Add Special Offer</h2>
+            <input id="admin-offer-id" type="hidden">
+            <div class="admin-field">
+              <label for="admin-offer-title">Offer name</label>
+              <input id="admin-offer-title" type="text" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-description">Description</label>
+              <textarea id="admin-offer-description" required></textarea>
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-badge">Badge text</label>
+              <input id="admin-offer-badge" type="text" placeholder="Limited Offer">
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-category">Badge style</label>
+              <select id="admin-offer-category">
+                <option value="standard">Standard</option>
+                <option value="popular">Most Popular</option>
+                <option value="limited">Limited Offer</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-price">Offer price</label>
+              <input id="admin-offer-price" type="text" placeholder="₹399" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-original-price">Original price (optional)</label>
+              <input id="admin-offer-original-price" type="text" placeholder="₹599">
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-booking">Booking service name</label>
+              <input id="admin-offer-booking" type="text" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-image-select">Offer Image (Drop Down Menu)</label>
+              <select id="admin-offer-image-select" class="admin-image-dropdown"></select>
+              <div class="image-upload-row">
+                <label class="admin-upload-btn" for="admin-offer-image-file">
+                  📁 Upload From Device
+                  <input id="admin-offer-image-file" type="file" accept="image/*" class="sr-only">
+                </label>
+                <span class="upload-note">Or choose any image file</span>
+              </div>
+              <img class="image-upload-preview" id="admin-offer-image-preview" alt="Offer image preview">
+            </div>
+            <div class="admin-field">
+              <label for="admin-offer-alt">Image alt text (optional)</label>
+              <input id="admin-offer-alt" type="text" placeholder="Offer image description">
+            </div>
+            <div class="admin-form-actions">
+              <button class="btn btn-gold btn-sm" type="submit" id="admin-offer-save">Add Offer</button>
+              <button class="btn btn-outline-dark btn-sm" type="button" id="admin-offer-reset">Reset</button>
+            </div>
+            <p class="admin-notice" id="admin-offer-notice" role="status" aria-live="polite"></p>
+          </form>
+
+          <section class="admin-table-wrap" aria-labelledby="manage-offers-heading">
+            <h2 id="manage-offers-heading">Manage Special Offers</h2>
+            <p class="section-subtitle" id="admin-offer-count" style="margin-bottom:16px"></p>
+            <div class="admin-table-scroll">
+              <table class="admin-table">
+                <thead><tr><th>Preview</th><th>Offer</th><th>Price</th><th>Badge</th><th>Actions</th></tr></thead>
+                <tbody id="admin-offers-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-content-section" id="gallery-panel" aria-label="Gallery management" hidden>
+        <div class="admin-grid">
+          <form class="admin-panel" id="admin-gallery-form">
+            <h2 id="admin-gallery-form-title">Add Gallery Image</h2>
+            <input id="admin-gallery-id" type="hidden">
+            <div class="admin-field">
+              <label for="admin-gallery-caption">Gallery caption</label>
+              <input id="admin-gallery-caption" type="text" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-gallery-category">Category</label>
+              <select id="admin-gallery-category" required>
+                <option value="hair">Hair</option>
+                <option value="skin">Skin</option>
+                <option value="bridal">Bridal</option>
+                <option value="beauty">Beauty</option>
+                <option value="salon">Salon Interior</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label for="admin-gallery-image-select">Main Gallery Image (Drop Down Menu)</label>
+              <select id="admin-gallery-image-select" class="admin-image-dropdown"></select>
+              <div class="image-upload-row">
+                <label class="admin-upload-btn" for="admin-gallery-image-file">
+                  📁 Upload From Device
+                  <input id="admin-gallery-image-file" type="file" accept="image/*" class="sr-only">
+                </label>
+                <span class="upload-note">Or choose any image file</span>
+              </div>
+              <img class="image-upload-preview" id="admin-gallery-image-preview" alt="Gallery image preview">
+            </div>
+            <div class="admin-field">
+              <label for="admin-gallery-alt">Image alt text (optional)</label>
+              <input id="admin-gallery-alt" type="text" placeholder="Gallery photo description">
+            </div>
+            <div class="admin-field">
+              <label for="admin-gallery-before-select">Before Image for Transformation (Optional Drop Down Menu)</label>
+              <select id="admin-gallery-before-select" class="admin-image-dropdown"></select>
+              <div class="image-upload-row">
+                <label class="admin-upload-btn" for="admin-gallery-before-file">
+                  📁 Upload Before Photo
+                  <input id="admin-gallery-before-file" type="file" accept="image/*" class="sr-only">
+                </label>
+              </div>
+              <img class="image-upload-preview" id="admin-gallery-before-preview" alt="Before image preview" style="display:none;">
+            </div>
+            <div class="admin-field">
+              <label for="admin-gallery-after-select">After Image for Transformation (Optional Drop Down Menu)</label>
+              <select id="admin-gallery-after-select" class="admin-image-dropdown"></select>
+              <div class="image-upload-row">
+                <label class="admin-upload-btn" for="admin-gallery-after-file">
+                  📁 Upload After Photo
+                  <input id="admin-gallery-after-file" type="file" accept="image/*" class="sr-only">
+                </label>
+              </div>
+              <img class="image-upload-preview" id="admin-gallery-after-preview" alt="After image preview" style="display:none;">
+            </div>
+            <div class="admin-form-actions">
+              <button class="btn btn-gold btn-sm" type="submit" id="admin-gallery-save">Add Gallery Image</button>
+              <button class="btn btn-outline-dark btn-sm" type="button" id="admin-gallery-reset">Reset</button>
+            </div>
+            <p class="admin-notice" id="admin-gallery-notice" role="status" aria-live="polite"></p>
+          </form>
+
+          <section class="admin-table-wrap" aria-labelledby="manage-gallery-heading">
+            <h2 id="manage-gallery-heading">Manage Our Gallery</h2>
+            <p class="section-subtitle" id="admin-gallery-count" style="margin-bottom:16px"></p>
+            <div class="admin-table-scroll">
+              <table class="admin-table">
+                <thead><tr><th>Preview</th><th>Caption</th><th>Category</th><th>Actions</th></tr></thead>
+                <tbody id="admin-gallery-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-content-section" id="images-panel" aria-label="Image management" hidden>
+        <div class="admin-grid">
+          <form class="admin-panel" id="admin-image-form">
+            <h2 id="admin-image-form-title">Edit Website Image</h2>
+            <input id="admin-image-id" type="hidden">
+            <div class="admin-field">
+              <label for="admin-website-image-target">Select Website Image to Edit (Drop Down Menu)</label>
+              <select id="admin-website-image-target" class="admin-image-dropdown"></select>
+            </div>
+            <div class="admin-field">
+              <label for="admin-image-label">Image label / description</label>
+              <input id="admin-image-label" type="text" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-image-select">Replace Image From Library (Drop Down Menu)</label>
+              <select id="admin-image-select" class="admin-image-dropdown"></select>
+              <div class="image-upload-row">
+                <label class="admin-upload-btn" for="admin-image-file">
+                  📁 Upload New Photo From Device
+                  <input id="admin-image-file" type="file" accept="image/*" class="sr-only">
+                </label>
+                <span class="upload-note">Or choose any image from your computer</span>
+              </div>
+              <img class="image-upload-preview" id="admin-image-preview" alt="Selected image preview">
+            </div>
+            <div class="admin-form-actions">
+              <button class="btn btn-gold btn-sm" type="submit" id="admin-image-save">Update Image</button>
+              <button class="btn btn-outline-dark btn-sm" type="button" id="admin-image-reset">Reset</button>
+            </div>
+            <p class="admin-notice" id="admin-image-notice" role="status" aria-live="polite"></p>
+          </form>
+
+          <section class="admin-table-wrap" aria-labelledby="manage-images-heading">
+            <h2 id="manage-images-heading">All Website Images</h2>
+            <p class="section-subtitle" style="margin-bottom:16px">Select and update any image across the public website.</p>
+            <div class="admin-table-scroll">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>Image Details</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-images-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="image-manifest.js"></script>
+  <script>
+    if (sessionStorage.getItem("vip_admin_authenticated") !== "true") {
+      window.location.replace("login.html");
+    }
+
+    const categoryNames = {
+      hair: "Hair Services",
+      skin: "Skin Care",
+      beauty: "Beauty Services",
+      "hands-feet": "Hands & Feet",
+      bridal: "Bridal & Special"
+    };
+
+    const fallbackServices = window.VIP_IMAGE_MANIFEST.services;
+
+    // Categorized Salon Image Library for all Drop Down Menus
+    const IMAGE_LIBRARY = [
+      {
+        group: "Special Offers",
+        items: [
+          { name: "Manicure + Pedicure Special Offer", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80" },
+          { name: "Keratin Treatment Special Offer", url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" },
+          { name: "₹99 Beauty Services Special", url: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80" }
+        ]
+      },
+      {
+        group: "Hair Services",
+        items: [
+          { name: "Hair Wash & Cleansing", url: "https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?auto=format&fit=crop&w=600&q=80" },
+          { name: "Trendy Hair Cut", url: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80" },
+          { name: "Hair Spa Nourishing", url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80" },
+          { name: "Hair Colour & Highlights", url: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=600&q=80" },
+          { name: "Keratin Smooth Treatment", url: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80" },
+          { name: "Hair Styling & Waves", url: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=600&q=80" },
+          { name: "Hair Oil Relaxation Massage", url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80" },
+          { name: "Blow Dry Volume & Finish", url: "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80" }
+        ]
+      },
+      {
+        group: "Skin Care & Facials",
+        items: [
+          { name: "Deep Pore Clean-up", url: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80" },
+          { name: "Hydra Glow Herbal & Fruit Facial", url: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80" },
+          { name: "D-Tan Radiance Treatment", url: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80" },
+          { name: "Brightening Bleach Service", url: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80" },
+          { name: "Advanced Skin Nourishment", url: "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80" }
+        ]
+      },
+      {
+        group: "Beauty Services",
+        items: [
+          { name: "Hygienic Waxing Care", url: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80" },
+          { name: "Precise Facial Threading", url: "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80" },
+          { name: "Eyebrow Contouring & Shaping", url: "https://images.unsplash.com/photo-1597225244660-1cd128c64284?auto=format&fit=crop&w=600&q=80" },
+          { name: "Upper Lip Threading", url: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80" },
+          { name: "Skin Shiner & Glow Finish", url: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80" }
+        ]
+      },
+      {
+        group: "Hands, Feet & Nails",
+        items: [
+          { name: "Deluxe Manicure Hand Care", url: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" },
+          { name: "Relaxing Pedicure Foot Bath", url: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80" },
+          { name: "Manicure + Pedicure Combo Care", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80" },
+          { name: "Creative Nail Art & Polish", url: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=600&q=80" }
+        ]
+      },
+      {
+        group: "Bridal & Glamour",
+        items: [
+          { name: "Luxury HD Bridal Makeover", url: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80" },
+          { name: "Evening & Party Event Makeup", url: "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=600&q=80" },
+          { name: "Intricate Bridal Hairstyling", url: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=600&q=80" },
+          { name: "Pre-Bridal & Festive Package", url: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=600&q=80" }
+        ]
+      },
+      {
+        group: "Salon Ambiance & Interior",
+        items: [
+          { name: "VIP Beauty Salon Luxury Interior", url: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" },
+          { name: "Appointment Consultation Area", url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=700&q=80" }
+        ]
+      }
+    ];
+
+    function getDefaultServiceImage(category) {
+      const defaults = {
+        hair: "https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?auto=format&fit=crop&w=600&q=80",
+        skin: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80",
+        beauty: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80",
+        "hands-feet": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
+        bridal: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80"
+      };
+      return defaults[category] || defaults.hair;
+    }
+
+    function populateImageDropdown(selectEl, selectedVal, optionalNoneText) {
+      if (!selectEl) return;
+      selectEl.innerHTML = "";
+      if (optionalNoneText) {
+        const noneOpt = document.createElement("option");
+        noneOpt.value = "";
+        noneOpt.textContent = optionalNoneText;
+        selectEl.appendChild(noneOpt);
+      }
+      let found = false;
+      IMAGE_LIBRARY.forEach(grp => {
+        const optGroup = document.createElement("optgroup");
+        optGroup.label = grp.group;
+        grp.items.forEach(item => {
+          const opt = document.createElement("option");
+          opt.value = item.url;
+          opt.textContent = item.name;
+          if (selectedVal && selectedVal === item.url) {
+            opt.selected = true;
+            found = true;
+          }
+          optGroup.appendChild(opt);
+        });
+        selectEl.appendChild(optGroup);
+      });
+
+      if (selectedVal && selectedVal.startsWith("data:")) {
+        const customOpt = document.createElement("option");
+        customOpt.value = selectedVal;
+        customOpt.textContent = "Custom Upload (From Device)";
+        customOpt.dataset.custom = "true";
+        customOpt.selected = true;
+        selectEl.prepend(customOpt);
+      } else if (!found && selectedVal && !optionalNoneText) {
+        const currOpt = document.createElement("option");
+        currOpt.value = selectedVal;
+        currOpt.textContent = "Current Image Selection";
+        currOpt.selected = true;
+        selectEl.prepend(currOpt);
+      }
+    }
+
+    function attachFileUploadHandler(fileInput, dropdownSelect, previewImg) {
+      if (!fileInput || !dropdownSelect) return;
+      fileInput.addEventListener("change", async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        try {
+          const dataUrl = await fileToResizedDataUrl(file);
+          let customOpt = dropdownSelect.querySelector("option[data-custom='true']");
+          if (!customOpt) {
+            customOpt = document.createElement("option");
+            customOpt.dataset.custom = "true";
+            dropdownSelect.prepend(customOpt);
+          }
+          customOpt.value = dataUrl;
+          customOpt.textContent = `Custom Upload (${file.name})`;
+          customOpt.selected = true;
+          if (previewImg) {
+            previewImg.src = dataUrl;
+            previewImg.style.display = "block";
+          }
+        } catch (err) {
+          alert(err.message || "Could not read image file.");
+        }
+      });
+    }
+
+    function attachDropdownChangeHandler(dropdownSelect, previewImg) {
+      if (!dropdownSelect || !previewImg) return;
+      dropdownSelect.addEventListener("change", () => {
+        const val = dropdownSelect.value;
+        if (val) {
+          previewImg.src = val;
+          previewImg.style.display = "block";
+        } else {
+          previewImg.src = "";
+          previewImg.style.display = "none";
+        }
+      });
+    }
+
+    // Services Controls
+    const form = document.getElementById("admin-service-form");
+    const serviceId = document.getElementById("admin-service-id");
+    const serviceName = document.getElementById("admin-service-name");
+    const serviceCategory = document.getElementById("admin-service-category");
+    const servicePrice = document.getElementById("admin-service-price");
+    const serviceDescription = document.getElementById("admin-service-description");
+    const serviceImageSelect = document.getElementById("admin-service-image-select");
+    const serviceImageFile = document.getElementById("admin-service-image-file");
+    const serviceImagePreview = document.getElementById("admin-service-image-preview");
+    const servicesBody = document.getElementById("admin-services-body");
+    const serviceCount = document.getElementById("admin-service-count");
+    const notice = document.getElementById("admin-notice");
+
+    // Special Offers Controls
+    const offerForm = document.getElementById("admin-offer-form");
+    const offerTitleInput = document.getElementById("admin-offer-title");
+    const offerDescInput = document.getElementById("admin-offer-description");
+    const offerBadgeInput = document.getElementById("admin-offer-badge");
+    const offerCatSelect = document.getElementById("admin-offer-category");
+    const offerPriceInput = document.getElementById("admin-offer-price");
+    const offerOrigPriceInput = document.getElementById("admin-offer-original-price");
+    const offerBookingInput = document.getElementById("admin-offer-booking");
+    const offerImageSelect = document.getElementById("admin-offer-image-select");
+    const offerImageFile = document.getElementById("admin-offer-image-file");
+    const offerImagePreview = document.getElementById("admin-offer-image-preview");
+    const offerAltInput = document.getElementById("admin-offer-alt");
+    const offersBody = document.getElementById("admin-offers-body");
+    const offerNotice = document.getElementById("admin-offer-notice");
+
+    // Gallery Controls
+    const galleryForm = document.getElementById("admin-gallery-form");
+    const galleryCaptionInput = document.getElementById("admin-gallery-caption");
+    const galleryCatSelect = document.getElementById("admin-gallery-category");
+    const galleryImageSelect = document.getElementById("admin-gallery-image-select");
+    const galleryImageFile = document.getElementById("admin-gallery-image-file");
+    const galleryImagePreview = document.getElementById("admin-gallery-image-preview");
+    const galleryAltInput = document.getElementById("admin-gallery-alt");
+    const galleryBeforeSelect = document.getElementById("admin-gallery-before-select");
+    const galleryBeforeFile = document.getElementById("admin-gallery-before-file");
+    const galleryBeforePreview = document.getElementById("admin-gallery-before-preview");
+    const galleryAfterSelect = document.getElementById("admin-gallery-after-select");
+    const galleryAfterFile = document.getElementById("admin-gallery-after-file");
+    const galleryAfterPreview = document.getElementById("admin-gallery-after-preview");
+    const galleryBody = document.getElementById("admin-gallery-body");
+    const galleryNotice = document.getElementById("admin-gallery-notice");
+
+    // Website Images Controls
+    const imageForm = document.getElementById("admin-image-form");
+    const imageIdInput = document.getElementById("admin-image-id");
+    const websiteImageTarget = document.getElementById("admin-website-image-target");
+    const imageLabelInput = document.getElementById("admin-image-label");
+    const imageSelect = document.getElementById("admin-image-select");
+    const imageFileInput = document.getElementById("admin-image-file");
+    const imagePreview = document.getElementById("admin-image-preview");
+    const imagesBody = document.getElementById("admin-images-body");
+    const imageNotice = document.getElementById("admin-image-notice");
+    let imageCatalog = [];
+
+    // Initialize dropdown change & file upload listeners
+    attachDropdownChangeHandler(serviceImageSelect, serviceImagePreview);
+    attachFileUploadHandler(serviceImageFile, serviceImageSelect, serviceImagePreview);
+
+    attachDropdownChangeHandler(offerImageSelect, offerImagePreview);
+    attachFileUploadHandler(offerImageFile, offerImageSelect, offerImagePreview);
+
+    attachDropdownChangeHandler(galleryImageSelect, galleryImagePreview);
+    attachFileUploadHandler(galleryImageFile, galleryImageSelect, galleryImagePreview);
+
+    attachDropdownChangeHandler(galleryBeforeSelect, galleryBeforePreview);
+    attachFileUploadHandler(galleryBeforeFile, galleryBeforeSelect, galleryBeforePreview);
+
+    attachDropdownChangeHandler(galleryAfterSelect, galleryAfterPreview);
+    attachFileUploadHandler(galleryAfterFile, galleryAfterSelect, galleryAfterPreview);
+
+    attachDropdownChangeHandler(imageSelect, imagePreview);
+    attachFileUploadHandler(imageFileInput, imageSelect, imagePreview);
+
+    function getServices() {
+      try {
+        const services = JSON.parse(localStorage.getItem("vip_salon_services") || "null");
+        return Array.isArray(services) ? services : fallbackServices.slice();
+      } catch (error) {
+        notice.textContent = "Could not read saved services from this browser.";
+        return fallbackServices.slice();
+      }
+    }
+
+    function normalizeServiceName(name) {
+      return String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+    }
+
+    function initializeServiceCatalog() {
+      const migrationKey = "vip_salon_services_catalog_v2";
+      if (localStorage.getItem(migrationKey) === "true") return;
+
+      try {
+        const saved = JSON.parse(localStorage.getItem("vip_salon_services") || "null");
+        const existingServices = Array.isArray(saved) ? saved : [];
+        const usedServices = new Set();
+        const allServices = fallbackServices.map((defaultService) => {
+          const existing = existingServices.find((service) =>
+            !usedServices.has(service) &&
+            (service.id === defaultService.id ||
+              normalizeServiceName(service.name) === normalizeServiceName(defaultService.name))
+          );
+          if (!existing) return { ...defaultService };
+
+          usedServices.add(existing);
+          return { ...defaultService, ...existing, id: existing.id || defaultService.id };
+        });
+
+        existingServices.forEach((service) => {
+          if (!usedServices.has(service)) allServices.push(service);
+        });
+
+        localStorage.setItem("vip_salon_services", JSON.stringify(allServices));
+        localStorage.setItem(migrationKey, "true");
+      } catch (error) {
+        notice.textContent = "Could not load or update the complete service list in browser storage.";
+        notice.style.color = "#A83232";
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function saveServices(services) {
+      try {
+        localStorage.setItem("vip_salon_services", JSON.stringify(services));
+        renderServices();
+        notice.textContent = "Services saved in this browser.";
+        notice.style.color = "#A88421";
+      } catch (error) {
+        notice.textContent = "Could not save services. Check browser storage settings.";
+        notice.style.color = "#A83232";
+      }
+    }
+
+    function readManagedList(storageKey, defaults) {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+        if (Array.isArray(saved)) return saved;
+        localStorage.setItem(storageKey, JSON.stringify(defaults));
+        return defaults;
+      } catch (error) {
+        return defaults;
+      }
+    }
+
+    function saveManagedList(storageKey, items, targetNotice, render) {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(items));
+        render();
+        targetNotice.textContent = "Changes saved in this browser.";
+        targetNotice.style.color = "#A88421";
+      } catch (error) {
+        targetNotice.textContent = "Could not save changes. Browser storage may be full.";
+        targetNotice.style.color = "#A83232";
+      }
+    }
+
+    function getOffers() {
+      return readManagedList("vip_salon_offers", window.VIP_IMAGE_MANIFEST.offers);
+    }
+
+    function getGalleryItems() {
+      return readManagedList("vip_salon_gallery", window.VIP_IMAGE_MANIFEST.galleryContent);
+    }
+
+    function setFormValues(prefix, item, fields) {
+      document.getElementById(`${prefix}-id`).value = item.id;
+      fields.forEach(field => {
+        const fieldId = {
+          beforeImage: "before",
+          afterImage: "after",
+          bookingService: "booking"
+        }[field] || field;
+        const inputId = `${prefix}-${fieldId.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)}`;
+        document.getElementById(inputId).value = item[field] || "";
+      });
+    }
+
+    function validateHttpUrl(value, label) {
+      try {
+        const url = new URL(value);
+        if (url.protocol === "http:" || url.protocol === "https:") return url.href;
+      } catch (_) {
+        // The caller displays a field-specific validation message.
+      }
+      throw new Error(`${label} must be a valid HTTP or HTTPS URL.`);
+    }
+
+    function resetOfferForm() {
+      offerForm.reset();
+      document.getElementById("admin-offer-id").value = "";
+      document.getElementById("admin-offer-form-title").textContent = "Add Special Offer";
+      document.getElementById("admin-offer-save").textContent = "Add Offer";
+      const defaultOfferImg = "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80";
+      populateImageDropdown(offerImageSelect, defaultOfferImg);
+      offerImagePreview.src = defaultOfferImg;
+      offerImagePreview.style.display = "block";
+    }
+
+    function renderOffers() {
+      const offers = getOffers();
+      document.getElementById("admin-offer-count").textContent = `Showing all ${offers.length} special offers`;
+      offersBody.innerHTML = offers.map(offer => `
+        <tr>
+          <td><img class="image-table-thumb" src="${escapeHtml(offer.image)}" alt=""></td>
+          <td><strong>${escapeHtml(offer.title)}</strong></td>
+          <td>${escapeHtml(offer.price)}</td>
+          <td>${escapeHtml(offer.badge || "—")}</td>
+          <td><div class="admin-row-actions">
+            <button class="admin-action-btn" type="button" data-offer-action="edit" data-id="${escapeHtml(offer.id)}">Edit</button>
+            <button class="admin-action-btn delete" type="button" data-offer-action="delete" data-id="${escapeHtml(offer.id)}">Delete</button>
+          </div></td>
+        </tr>
+      `).join("");
+    }
+
+    offerForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const id = document.getElementById("admin-offer-id").value;
+      const image = offerImageSelect.value;
+      if (!image) {
+        offerNotice.textContent = "Please choose an image from the dropdown menu.";
+        offerNotice.style.color = "#A83232";
+        return;
+      }
+
+      const offer = {
+        id: id || `offer-${Date.now()}`,
+        title: offerTitleInput.value.trim(),
+        description: offerDescInput.value.trim(),
+        badge: offerBadgeInput.value.trim(),
+        category: offerCatSelect.value,
+        price: offerPriceInput.value.trim(),
+        originalPrice: offerOrigPriceInput.value.trim(),
+        bookingService: offerBookingInput.value.trim(),
+        image,
+        alt: offerAltInput.value.trim() || offerTitleInput.value.trim()
+      };
+      const offers = getOffers();
+      const index = offers.findIndex(item => item.id === id);
+      if (index >= 0) offers[index] = offer;
+      else offers.push(offer);
+      saveManagedList("vip_salon_offers", offers, offerNotice, renderOffers);
+      resetOfferForm();
+    });
+
+    document.getElementById("admin-offer-reset").addEventListener("click", resetOfferForm);
+    offersBody.addEventListener("click", event => {
+      const button = event.target.closest("[data-offer-action]");
+      if (!button) return;
+      const offers = getOffers();
+      const offer = offers.find(item => item.id === button.dataset.id);
+      if (!offer) return;
+
+      if (button.dataset.offerAction === "edit") {
+        document.getElementById("admin-offer-id").value = offer.id;
+        offerTitleInput.value = offer.title || "";
+        offerDescInput.value = offer.description || "";
+        offerBadgeInput.value = offer.badge || "";
+        offerCatSelect.value = offer.category || "standard";
+        offerPriceInput.value = offer.price || "";
+        offerOrigPriceInput.value = offer.originalPrice || "";
+        offerBookingInput.value = offer.bookingService || "";
+        offerAltInput.value = offer.alt || "";
+        populateImageDropdown(offerImageSelect, offer.image);
+        offerImagePreview.src = offer.image;
+        offerImagePreview.style.display = "block";
+        document.getElementById("admin-offer-form-title").textContent = "Edit Special Offer";
+        document.getElementById("admin-offer-save").textContent = "Update Offer";
+        offerTitleInput.focus();
+      } else if (window.confirm(`Delete "${offer.title}"?`)) {
+        saveManagedList("vip_salon_offers", offers.filter(item => item.id !== offer.id), offerNotice, renderOffers);
+        resetOfferForm();
+      }
+    });
+
+    function resetGalleryForm() {
+      galleryForm.reset();
+      document.getElementById("admin-gallery-id").value = "";
+      document.getElementById("admin-gallery-form-title").textContent = "Add Gallery Image";
+      document.getElementById("admin-gallery-save").textContent = "Add Gallery Image";
+      const defaultGalImg = "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=800&q=80";
+      populateImageDropdown(galleryImageSelect, defaultGalImg);
+      galleryImagePreview.src = defaultGalImg;
+      galleryImagePreview.style.display = "block";
+      populateImageDropdown(galleryBeforeSelect, "", "— None (Standard Single Image) —");
+      galleryBeforePreview.style.display = "none";
+      populateImageDropdown(galleryAfterSelect, "", "— None (Standard Single Image) —");
+      galleryAfterPreview.style.display = "none";
+    }
+
+    function renderGalleryItems() {
+      const items = getGalleryItems();
+      document.getElementById("admin-gallery-count").textContent = `Showing all ${items.length} gallery items`;
+      galleryBody.innerHTML = items.map(item => `
+        <tr>
+          <td><img class="image-table-thumb" src="${escapeHtml(item.image)}" alt=""></td>
+          <td><strong>${escapeHtml(item.caption)}</strong></td>
+          <td>${escapeHtml(item.category)}</td>
+          <td><div class="admin-row-actions">
+            <button class="admin-action-btn" type="button" data-gallery-action="edit" data-id="${escapeHtml(item.id)}">Edit</button>
+            <button class="admin-action-btn delete" type="button" data-gallery-action="delete" data-id="${escapeHtml(item.id)}">Delete</button>
+          </div></td>
+        </tr>
+      `).join("");
+    }
+
+    galleryForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const id = document.getElementById("admin-gallery-id").value;
+      const image = galleryImageSelect.value;
+      if (!image) {
+        galleryNotice.textContent = "Please select a main gallery image.";
+        galleryNotice.style.color = "#A83232";
+        return;
+      }
+      const beforeImage = galleryBeforeSelect.value;
+      const afterImage = galleryAfterSelect.value;
+      const caption = galleryCaptionInput.value.trim();
+
+      const item = {
+        id: id || `gallery-${Date.now()}`,
+        caption,
+        category: galleryCatSelect.value,
+        image,
+        alt: galleryAltInput.value.trim() || caption,
+        beforeImage: beforeImage || "",
+        beforeAlt: beforeImage ? `${caption} Before` : "",
+        afterImage: afterImage || "",
+        afterAlt: afterImage ? `${caption} After` : ""
+      };
+      const items = getGalleryItems();
+      const index = items.findIndex(existing => existing.id === id);
+      if (index >= 0) items[index] = item;
+      else items.push(item);
+      saveManagedList("vip_salon_gallery", items, galleryNotice, renderGalleryItems);
+      resetGalleryForm();
+    });
+
+    document.getElementById("admin-gallery-reset").addEventListener("click", resetGalleryForm);
+    galleryBody.addEventListener("click", event => {
+      const button = event.target.closest("[data-gallery-action]");
+      if (!button) return;
+      const items = getGalleryItems();
+      const item = items.find(entry => entry.id === button.dataset.id);
+      if (!item) return;
+
+      if (button.dataset.galleryAction === "edit") {
+        document.getElementById("admin-gallery-id").value = item.id;
+        galleryCaptionInput.value = item.caption || "";
+        galleryCatSelect.value = item.category || "hair";
+        galleryAltInput.value = item.alt || "";
+        populateImageDropdown(galleryImageSelect, item.image);
+        galleryImagePreview.src = item.image;
+        galleryImagePreview.style.display = "block";
+
+        populateImageDropdown(galleryBeforeSelect, item.beforeImage || "", "— None (Standard Single Image) —");
+        if (item.beforeImage) {
+          galleryBeforePreview.src = item.beforeImage;
+          galleryBeforePreview.style.display = "block";
+        } else {
+          galleryBeforePreview.style.display = "none";
+        }
+
+        populateImageDropdown(galleryAfterSelect, item.afterImage || "", "— None (Standard Single Image) —");
+        if (item.afterImage) {
+          galleryAfterPreview.src = item.afterImage;
+          galleryAfterPreview.style.display = "block";
+        } else {
+          galleryAfterPreview.style.display = "none";
+        }
+
+        document.getElementById("admin-gallery-form-title").textContent = "Edit Gallery Image";
+        document.getElementById("admin-gallery-save").textContent = "Update Gallery Image";
+        galleryCaptionInput.focus();
+      } else if (window.confirm(`Delete "${item.caption}" from the gallery?`)) {
+        saveManagedList("vip_salon_gallery", items.filter(entry => entry.id !== item.id), galleryNotice, renderGalleryItems);
+        resetGalleryForm();
+      }
+    });
+
+    function renderServices() {
+      const services = getServices();
+      serviceCount.textContent = `Showing all ${services.length} services`;
+      servicesBody.innerHTML = services.map((service) => {
+        const imgSrc = service.image || getDefaultServiceImage(service.category);
+        return `
+          <tr>
+            <td><img class="image-table-thumb" src="${escapeHtml(imgSrc)}" alt=""></td>
+            <td><strong>${escapeHtml(service.name)}</strong></td>
+            <td>${escapeHtml(categoryNames[service.category] || service.category)}</td>
+            <td>${escapeHtml(service.price)}</td>
+            <td>
+              <div class="admin-row-actions">
+                <button class="admin-action-btn" type="button" data-action="edit" data-id="${escapeHtml(service.id)}">Edit</button>
+                <button class="admin-action-btn delete" type="button" data-action="delete" data-id="${escapeHtml(service.id)}">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function readImageOverrides() {
+      try {
+        return JSON.parse(localStorage.getItem("vip_salon_images") || "{}");
+      } catch (error) {
+        imageNotice.textContent = "Could not read saved image changes from this browser.";
+        return {};
+      }
+    }
+
+    function writeImageOverrides(overrides) {
+      try {
+        localStorage.setItem("vip_salon_images", JSON.stringify(overrides));
+        renderImages();
+        imageNotice.textContent = "Image changes saved in this browser.";
+        imageNotice.style.color = "#A88421";
+      } catch (error) {
+        imageNotice.textContent = "Could not save image changes. Check browser storage settings.";
+        imageNotice.style.color = "#A83232";
+      }
+    }
+
+    function populateWebsiteTargetDropdown() {
+      if (!websiteImageTarget || !imageCatalog.length) return;
+      websiteImageTarget.innerHTML = '<option value="">— Select Website Image to Edit —</option>';
+      const pageGrp = document.createElement("optgroup");
+      pageGrp.label = "Website Page & Hero Images";
+      const galGrp = document.createElement("optgroup");
+      galGrp.label = "Gallery Images";
+
+      imageCatalog.forEach(img => {
+        const opt = document.createElement("option");
+        opt.value = img.id;
+        opt.textContent = img.label;
+        if (img.type === "gallery") galGrp.appendChild(opt);
+        else pageGrp.appendChild(opt);
+      });
+      websiteImageTarget.appendChild(pageGrp);
+      websiteImageTarget.appendChild(galGrp);
+    }
+
+    async function loadImageCatalog() {
+      const manifest = window.VIP_IMAGE_MANIFEST;
+      imageCatalog = [
+        ...(manifest?.page || []).map(([url, label], index) => ({
+          id: `page-image-${index}`,
+          type: "page",
+          label,
+          url
+        })),
+        ...(manifest?.gallery || []).map(([url, label], index) => ({
+          id: `gallery-image-${index}`,
+          type: "gallery",
+          label,
+          url
+        }))
+      ];
+
+      try {
+        const [indexResponse, scriptResponse] = await Promise.all([
+          fetch("index.html"),
+          fetch("script.js")
+        ]);
+        if (!indexResponse.ok || !scriptResponse.ok) throw new Error("Could not load website image sources.");
+
+        const indexHtml = await indexResponse.text();
+        const scriptText = await scriptResponse.text();
+        const indexDocument = new DOMParser().parseFromString(indexHtml, "text/html");
+        const pageImages = [...indexDocument.querySelectorAll("img:not(#lightbox-img)")];
+        const pageEntries = pageImages
+          .filter(image => image.getAttribute("src"))
+          .map((image, index) => ({
+            id: `page-image-${index}`,
+            type: "page",
+            label: image.alt || `Website image ${index + 1}`,
+            url: image.getAttribute("src")
+          }));
+
+        const galleryBlock = scriptText.match(/const galleryItemsData = \[([\s\S]*?)\\n\];/);
+        const galleryEntries = galleryBlock
+          ? [...galleryBlock[1].matchAll(/\{\s*src:\s*"([^"]+)",\s*caption:\s*"([^"]+)",\s*category:\s*"([^"]+)"\s*\}/g)]
+            .map((match, index) => ({
+              id: `gallery-image-${index}`,
+              type: "gallery",
+              label: match[2],
+              url: match[1]
+            }))
+          : [];
+
+        if (pageEntries.length) {
+          imageCatalog = [...pageEntries, ...galleryEntries];
+        }
+      } catch (error) {
+        if (!imageCatalog.length) {
+          imageNotice.textContent = "Could not load website images. Please open this site through a local web server.";
+          imageNotice.style.color = "#A83232";
+          return;
+        }
+      }
+
+      populateWebsiteTargetDropdown();
+      renderImages();
+    }
+
+    function renderImages() {
+      if (!imagesBody || !imageCatalog.length) return;
+      const overrides = readImageOverrides();
+      imagesBody.innerHTML = imageCatalog.map(image => {
+        const saved = overrides[image.id] || {};
+        const label = saved.label || image.label;
+        const url = saved.url || image.url;
+        const deleted = Boolean(saved.deleted);
+        const isCustom = url.startsWith("data:");
+        const statusBadge = deleted
+          ? '<span class="image-status-badge removed">Removed from site</span>'
+          : isCustom
+            ? '<span class="image-status-badge custom">Custom Upload</span>'
+            : '<span class="image-status-badge">Active</span>';
+        return `
+          <tr>
+            <td><img class="image-table-thumb" src="${escapeHtml(url)}" alt=""></td>
+            <td>
+              <strong>${escapeHtml(label)}</strong><br>
+              <span style="color:#777168;font-size:11px;">${image.type === "gallery" ? "Gallery Lightbox Image" : "Website Page Image"}</span>
+            </td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="admin-row-actions">
+                <button class="admin-action-btn" type="button" data-image-action="edit" data-id="${escapeHtml(image.id)}">Edit</button>
+                <button class="admin-action-btn delete" type="button" data-image-action="${deleted ? "restore" : "delete"}" data-id="${escapeHtml(image.id)}">${deleted ? "Restore" : "Delete"}</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function resetImageForm() {
+      imageIdInput.value = "";
+      imageForm.reset();
+      imagePreview.removeAttribute("src");
+      imagePreview.style.display = "none";
+      if (websiteImageTarget) websiteImageTarget.value = "";
+      populateImageDropdown(imageSelect, "");
+      document.getElementById("admin-image-form-title").textContent = "Edit Website Image";
+    }
+
+    function loadWebsiteImageForEdit(targetId) {
+      if (!targetId) return;
+      const image = imageCatalog.find(item => item.id === targetId);
+      if (!image) return;
+      const overrides = readImageOverrides();
+      const saved = overrides[image.id] || {};
+
+      imageIdInput.value = image.id;
+      if (websiteImageTarget) websiteImageTarget.value = image.id;
+      imageLabelInput.value = saved.label || image.label;
+      const currentUrl = saved.url || image.url;
+      populateImageDropdown(imageSelect, currentUrl);
+      imagePreview.src = currentUrl;
+      imagePreview.style.display = "block";
+      document.getElementById("admin-image-form-title").textContent = `Edit "${image.label}"`;
+      imageLabelInput.focus();
+    }
+
+    if (websiteImageTarget) {
+      websiteImageTarget.addEventListener("change", () => {
+        loadWebsiteImageForEdit(websiteImageTarget.value);
+      });
+    }
+
+    function fileToResizedDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        if (!file.type.startsWith("image/")) {
+          reject(new Error("Choose a valid image file."));
+          return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          reject(new Error("Choose an image smaller than 10 MB."));
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("The selected image could not be read."));
+        reader.onload = () => {
+          const sourceImage = new Image();
+          sourceImage.onerror = () => reject(new Error("The selected file is not a usable image."));
+          sourceImage.onload = () => {
+            const maxDimension = 1400;
+            const scale = Math.min(1, maxDimension / Math.max(sourceImage.width, sourceImage.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(sourceImage.width * scale));
+            canvas.height = Math.max(1, Math.round(sourceImage.height * scale));
+            const context = canvas.getContext("2d");
+            if (!context) {
+              reject(new Error("Image resizing is not supported in this browser."));
+              return;
+            }
+            context.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", 0.82));
+          };
+          sourceImage.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    imageForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const targetId = imageIdInput.value || (websiteImageTarget ? websiteImageTarget.value : "");
+      const image = imageCatalog.find(item => item.id === targetId);
+      if (!image) {
+        imageNotice.textContent = "Select an image from the dropdown menu or list before updating it.";
+        imageNotice.style.color = "#A83232";
+        return;
+      }
+
+      const updatedUrl = imageSelect.value || image.url;
+      const overrides = readImageOverrides();
+      overrides[image.id] = {
+        ...(overrides[image.id] || {}),
+        label: imageLabelInput.value.trim() || image.label,
+        url: updatedUrl,
+        deleted: false
+      };
+      writeImageOverrides(overrides);
+      resetImageForm();
+    });
+
+    document.getElementById("admin-image-reset").addEventListener("click", resetImageForm);
+
+    imagesBody.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-image-action]");
+      if (!button) return;
+      const image = imageCatalog.find(item => item.id === button.dataset.id);
+      if (!image) return;
+      const overrides = readImageOverrides();
+      const saved = overrides[image.id] || {};
+
+      if (button.dataset.imageAction === "edit") {
+        loadWebsiteImageForEdit(image.id);
+      } else if (button.dataset.imageAction === "delete") {
+        if (!window.confirm(`Remove "${saved.label || image.label}" from the website?`)) return;
+        overrides[image.id] = { ...saved, deleted: true };
+        writeImageOverrides(overrides);
+        resetImageForm();
+      } else if (button.dataset.imageAction === "restore") {
+        overrides[image.id] = { ...saved, deleted: false };
+        writeImageOverrides(overrides);
+      }
+    });
+
+    document.getElementById("admin-section-select").addEventListener("change", (event) => {
+      const selectedPanel = event.target.value;
+      document.querySelectorAll(".admin-content-section").forEach(panel => {
+        panel.hidden = panel.id !== selectedPanel;
+      });
+    });
+
+    function resetForm() {
+      serviceId.value = "";
+      form.reset();
+      serviceCategory.value = "hair";
+      const defaultImg = getDefaultServiceImage("hair");
+      populateImageDropdown(serviceImageSelect, defaultImg);
+      serviceImagePreview.src = defaultImg;
+      serviceImagePreview.style.display = "block";
+      document.getElementById("admin-form-title").textContent = "Add New Service";
+      document.getElementById("admin-save-button").textContent = "Add Service";
+    }
+
+    serviceCategory.addEventListener("change", () => {
+      if (!serviceId.value) {
+        const catImg = getDefaultServiceImage(serviceCategory.value);
+        populateImageDropdown(serviceImageSelect, catImg);
+        serviceImagePreview.src = catImg;
+        serviceImagePreview.style.display = "block";
+      }
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = serviceName.value.trim();
+      const price = servicePrice.value.trim();
+      if (!name || !price) return;
+
+      const services = getServices();
+      const currentId = serviceId.value;
+      const image = serviceImageSelect.value || getDefaultServiceImage(serviceCategory.value);
+
+      if (currentId) {
+        const index = services.findIndex((service) => service.id === currentId);
+        if (index < 0) {
+          notice.textContent = "This service could not be found. Refresh and try again.";
+          notice.style.color = "#A83232";
+          return;
+        }
+        services[index] = {
+          ...services[index],
+          name,
+          category: serviceCategory.value,
+          price,
+          description: serviceDescription.value.trim(),
+          image
+        };
+      } else {
+        const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now();
+        services.push({
+          id,
+          name,
+          category: serviceCategory.value,
+          price,
+          description: serviceDescription.value.trim(),
+          image
+        });
+      }
+
+      saveServices(services);
+      resetForm();
+    });
+
+    document.getElementById("admin-reset-button").addEventListener("click", resetForm);
+
+    servicesBody.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const services = getServices();
+      const service = services.find((item) => item.id === button.dataset.id);
+      if (!service) return;
+
+      if (button.dataset.action === "edit") {
+        serviceId.value = service.id;
+        serviceName.value = service.name;
+        serviceCategory.value = service.category;
+        servicePrice.value = service.price;
+        serviceDescription.value = service.description || "";
+        const svcImg = service.image || getDefaultServiceImage(service.category);
+        populateImageDropdown(serviceImageSelect, svcImg);
+        serviceImagePreview.src = svcImg;
+        serviceImagePreview.style.display = "block";
+        document.getElementById("admin-form-title").textContent = "Edit Service";
+        document.getElementById("admin-save-button").textContent = "Update Service";
+        serviceName.focus();
+      } else if (button.dataset.action === "delete" && window.confirm(`Delete "${service.name}"?`)) {
+        saveServices(services.filter((item) => item.id !== service.id));
+        resetForm();
+      }
+    });
+
+    document.getElementById("admin-logout").addEventListener("click", () => {
+      sessionStorage.removeItem("vip_admin_authenticated");
+      window.location.href = "login.html";
+    });
+
+    // Initial setup on page load
+    initializeServiceCatalog();
+    resetForm();
+    resetOfferForm();
+    resetGalleryForm();
+    resetImageForm();
+    renderServices();
+    renderOffers();
+    renderGalleryItems();
+    loadImageCatalog();
+
+  </script>
+</body>
+</html>

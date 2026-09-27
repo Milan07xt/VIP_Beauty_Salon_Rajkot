@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | VIP Beauty Salon Rajkot</title>
+  <meta name="description" content="Login to the VIP Beauty Salon staff portal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.login-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 20%, rgba(212, 175, 55, 0.16), transparent 28rem),
+        radial-gradient(circle at 88% 78%, rgba(212, 175, 55, 0.1), transparent 24rem),
+        #111111;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .login-shell {
+      width: min(980px, 100%);
+      min-height: 620px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      border-radius: 28px;
+      background: #181818;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.48);
+    }
+
+    .login-brand-panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px;
+      color: #FFFFFF;
+      background:
+        linear-gradient(160deg, rgba(17, 17, 17, 0.16), rgba(17, 17, 17, 0.82)),
+        url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=85") center/cover;
+    }
+
+    .login-brand-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-right: 1px solid rgba(212, 175, 55, 0.2);
+      pointer-events: none;
+    }
+
+    .login-brand {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+    }
+
+    .login-brand .brand-crest {
+      font-size: 30px;
+    }
+
+    .login-brand-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 360px;
+    }
+
+    .login-brand-copy h1 {
+      margin-bottom: 12px;
+      font-family: var(--font-serif);
+      font-size: clamp(36px, 5vw, 54px);
+      line-height: 1.08;
+    }
+
+    .login-brand-copy p {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .login-form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px;
+      background: #FAF7F2;
+    }
+
+    .login-back {
+      align-self: flex-start;
+      margin-bottom: 38px;
+      color: var(--color-text-muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .login-back:hover {
+      color: var(--color-gold);
+    }
+
+    .login-heading {
+      margin-bottom: 30px;
+    }
+
+    .login-heading .section-tag {
+      margin-bottom: 8px;
+    }
+
+    .login-heading h2 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      line-height: 1.15;
+    }
+
+    .login-role-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 24px;
+      padding: 5px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 14px;
+      background: #FFFFFF;
+    }
+
+    .login-role-button {
+      min-height: 44px;
+      border-radius: 10px;
+      color: var(--color-text-muted);
+      font-size: 13px;
+      font-weight: 800;
+      transition: color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .login-role-button.active {
+      color: #111111;
+      background: var(--color-gold-gradient);
+      box-shadow: 0 5px 16px rgba(212, 175, 55, 0.24);
+    }
+
+    .login-field {
+      margin-bottom: 18px;
+    }
+
+    .login-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--color-text-dark);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .login-field input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 12px;
+      padding: 0 16px;
+      background: #FFFFFF;
+      color: var(--color-text-dark);
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .login-field input:focus {
+      border-color: var(--color-gold);
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap input {
+      padding-right: 58px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      color: var(--color-text-muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .login-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 4px 0 22px;
+      font-size: 12px;
+    }
+
+    .remember-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-text-body);
+    }
+
+    .remember-option input {
+      accent-color: var(--color-gold);
+    }
+
+    .login-submit {
+      width: 100%;
+      min-height: 54px;
+    }
+
+    .login-message {
+      min-height: 20px;
+      margin-top: 14px;
+      color: #A83232;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .admin-dashboard {
+      display: none;
+      width: min(1180px, calc(100vw - 48px));
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      border-radius: 24px;
+      background: #FAF7F2;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.48);
+    }
+
+    .admin-dashboard.open {
+      display: block;
+    }
+
+    .login-shell.admin-hidden {
+      display: none;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--color-border-card);
+    }
+
+    .admin-header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      padding: 24px 28px 28px;
+    }
+
+    .admin-panel {
+      padding: 20px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 16px;
+      background: #FFFFFF;
+    }
+
+    .admin-panel h3,
+    .admin-table-wrap h3 {
+      margin-bottom: 16px;
+      font-family: var(--font-serif);
+      font-size: 24px;
+    }
+
+    .admin-field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .admin-field label {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .admin-field input,
+    .admin-field select,
+    .admin-field textarea {
+      width: 100%;
+      border: 1px solid var(--color-border-card);
+      border-radius: 10px;
+      padding: 11px 12px;
+      background: #FFFFFF;
+      font-family: var(--font-sans);
+      outline: none;
+    }
+
+    .admin-field textarea {
+      min-height: 76px;
+      resize: vertical;
+    }
+
+    .admin-field input:focus,
+    .admin-field select:focus,
+    .admin-field textarea:focus {
+      border-color: var(--color-gold);
+    }
+
+    .admin-form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .admin-table-wrap {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 16px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    .admin-table-scroll {
+      overflow-x: auto;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--color-border-card);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .admin-table th {
+      color: var(--color-text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .admin-row-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .admin-action-btn {
+      padding: 7px 10px;
+      border: 1px solid var(--color-border-card);
+      border-radius: 8px;
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .admin-action-btn.edit:hover {
+      border-color: var(--color-gold);
+      color: #A88421;
+    }
+
+    .admin-action-btn.delete {
+      color: #A83232;
+    }
+
+    @media (max-width: 760px) {
+      body.login-page {
+        place-items: start center;
+        padding: 16px;
+      }
+
+      .login-shell {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+      }
+
+      .login-brand-panel {
+        min-height: 220px;
+        padding: 28px;
+      }
+
+      .login-brand-copy h1 {
+        font-size: 34px;
+      }
+
+      .login-form-panel {
+        padding: 32px 24px;
+      }
+
+      .login-back {
+        margin-bottom: 24px;
+      }
+
+      .login-heading {
+        margin-bottom: 22px;
+      }
+
+      .admin-dashboard {
+        width: calc(100vw - 32px);
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-header {
+        align-items: flex-start;
+        gap: 14px;
+      }
+    }
+  </style>
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <section class="login-brand-panel" aria-label="VIP Beauty Salon">
+      <a class="login-brand" href="index.html" aria-label="Back to VIP Beauty Salon Home">
+        <div class="brand-crest">♛</div>
+        <div class="brand-text">
+          <span class="brand-title">VIP</span>
+          <span class="brand-subtitle">BEAUTY SALON</span>
+        </div>
+      </a>
+      <div class="login-brand-copy">
+        <h1 id="brand-portal-title">Customer Portal</h1>
+        <p id="brand-portal-copy">View appointments, manage bookings and enjoy your VIP salon experience.</p>
+      </div>
+    </section>
+
+    <section class="login-form-panel">
+      <a class="login-back" href="index.html">← Back to website</a>
+      <div class="login-heading">
+        <span class="section-tag" id="login-tag">Customer Login</span>
+        <h2 id="login-heading">Welcome back</h2>
+      </div>
+
+      <div class="login-role-switch" role="tablist" aria-label="Choose login portal">
+        <button class="login-role-button active" id="customer-role" type="button" role="tab" aria-selected="true" data-role="customer">Customer</button>
+        <button class="login-role-button" id="admin-role" type="button" role="tab" aria-selected="false" data-role="admin">Admin</button>
+      </div>
+
+      <form id="login-form">
+        <div class="login-field">
+          <label for="login-email">Email or phone</label>
+          <input id="login-email" name="login" type="text" autocomplete="username" placeholder="Enter email or phone" required>
+        </div>
+        <div class="login-field">
+          <label for="login-password">Password</label>
+          <div class="password-wrap">
+            <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
+            <button class="password-toggle" type="button" id="password-toggle" aria-label="Show password">Show</button>
+          </div>
+        </div>
+        <div class="login-options">
+          <label class="remember-option">
+            <input type="checkbox" name="remember">
+            Remember me
+          </label>
+          <a href="mailto:vipbeautysalonrajkot@gmail.com">Need help?</a>
+        </div>
+        <button class="btn btn-gold login-submit" type="submit">Login</button>
+        <p class="login-message" id="login-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <section class="admin-dashboard" id="admin-dashboard" aria-label="Admin service management">
+    <header class="admin-header">
+      <div class="admin-header-brand">
+        <div class="brand-crest">♛</div>
+        <div class="brand-text">
+          <span class="brand-title" style="color:#111111">VIP</span>
+          <span class="brand-subtitle">ADMIN PORTAL</span>
+        </div>
+      </div>
+      <div class="admin-header-actions">
+        <a class="btn btn-outline-dark btn-sm" href="index.html">View Website</a>
+        <button class="btn btn-outline-dark btn-sm" id="admin-logout" type="button">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-grid">
+      <form class="admin-panel" id="admin-service-form">
+        <h3 id="admin-form-title">Add New Service</h3>
+        <input id="admin-service-id" type="hidden">
+        <div class="admin-field">
+          <label for="admin-service-name">Service Name</label>
+          <input id="admin-service-name" type="text" placeholder="e.g. Hair Spa" required>
+        </div>
+        <div class="admin-field">
+          <label for="admin-service-category">Category</label>
+          <select id="admin-service-category" required>
+            <option value="hair">Hair Services</option>
+            <option value="skin">Skin Care</option>
+            <option value="beauty">Beauty Services</option>
+            <option value="hands-feet">Hands & Feet</option>
+            <option value="bridal">Bridal & Special</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label for="admin-service-price">Price</label>
+          <input id="admin-service-price" type="text" placeholder="₹499 or Contact for Price" required>
+        </div>
+        <div class="admin-field">
+          <label for="admin-service-description">Description</label>
+          <textarea id="admin-service-description" placeholder="Service description"></textarea>
+        </div>
+        <div class="admin-form-actions">
+          <button class="btn btn-gold btn-sm" type="submit" id="admin-save-button">Add Service</button>
+          <button class="btn btn-outline-dark btn-sm" type="button" id="admin-reset-button">Reset</button>
+        </div>
+      </form>
+
+      <div class="admin-table-wrap">
+        <h3>Manage Services</h3>
+        <div class="admin-table-scroll">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-services-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="image-manifest.js"></script>
+  <script>
+    const passwordInput = document.getElementById("login-password");
+    const passwordToggle = document.getElementById("password-toggle");
+    const roleButtons = document.querySelectorAll(".login-role-button");
+    let selectedRole = "customer";
+    const adminUsername = "admin";
+    const adminPassword = "Admin@123";
+
+    passwordToggle.addEventListener("click", () => {
+      const showPassword = passwordInput.type === "password";
+      passwordInput.type = showPassword ? "text" : "password";
+      passwordToggle.textContent = showPassword ? "Hide" : "Show";
+      passwordToggle.setAttribute("aria-label", showPassword ? "Hide password" : "Show password");
+    });
+
+    roleButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedRole = button.dataset.role;
+
+        roleButtons.forEach((roleButton) => {
+          const active = roleButton === button;
+          roleButton.classList.toggle("active", active);
+          roleButton.setAttribute("aria-selected", String(active));
+        });
+
+        const isAdmin = selectedRole === "admin";
+        document.getElementById("login-tag").textContent = isAdmin ? "Admin Access" : "Customer Login";
+        document.getElementById("login-heading").textContent = isAdmin ? "Admin portal" : "Welcome back";
+        document.getElementById("brand-portal-title").textContent = isAdmin ? "Admin Portal" : "Customer Portal";
+        document.getElementById("brand-portal-copy").textContent = isAdmin
+          ? "Manage appointments, customer bookings and salon operations."
+          : "View appointments, manage bookings and enjoy your VIP salon experience.";
+        document.getElementById("login-message").textContent = "";
+        passwordInput.value = "";
+      });
+    });
+
+    document.getElementById("login-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const login = document.getElementById("login-email").value.trim();
+      const password = passwordInput.value;
+      const message = document.getElementById("login-message");
+
+      if (!login || !password) {
+        message.textContent = "Please enter your login details.";
+        return;
+      }
+
+      message.style.color = "#A88421";
+      if (selectedRole === "admin") {
+        if (login.toLowerCase() !== adminUsername || password !== adminPassword) {
+          message.style.color = "#A83232";
+          message.textContent = "Invalid admin username or password.";
+          return;
+        }
+        message.textContent = "Admin login successful.";
+        sessionStorage.setItem("vip_admin_authenticated", "true");
+        window.location.href = "admin-dashboard.html";
+      } else {
+        message.textContent = "Customer login is ready for authentication setup.";
+      }
+    });
+
+    const adminDashboard = document.getElementById("admin-dashboard");
+    const loginShell = document.querySelector(".login-shell");
+    const adminServiceForm = document.getElementById("admin-service-form");
+    const adminServicesBody = document.getElementById("admin-services-body");
+    const adminServiceId = document.getElementById("admin-service-id");
+    const serviceNameInput = document.getElementById("admin-service-name");
+    const serviceCategoryInput = document.getElementById("admin-service-category");
+    const servicePriceInput = document.getElementById("admin-service-price");
+    const serviceDescriptionInput = document.getElementById("admin-service-description");
+
+    const fallbackServices = window.VIP_IMAGE_MANIFEST.services;
+
+    function getServices() {
+      try {
+        return JSON.parse(localStorage.getItem("vip_salon_services") || "null") || null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function saveServices(services) {
+      localStorage.setItem("vip_salon_services", JSON.stringify(services));
+      renderAdminServices();
+    }
+
+    function makeServiceId(name) {
+      return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString().slice(-5);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    async function openAdminDashboard() {
+      let services = getServices();
+
+      if (!services) {
+        try {
+          const response = await fetch("index.html");
+          const html = await response.text();
+          const documentIndex = new DOMParser().parseFromString(html, "text/html");
+          services = [...documentIndex.querySelectorAll(".service-card")].map((card, index) => ({
+            id: "service-" + (index + 1),
+            name: card.querySelector(".service-title")?.textContent.trim() || "Service",
+            category: card.dataset.category || "beauty",
+            price: card.querySelector(".service-price")?.textContent.trim() || "Contact for Price",
+            description: card.querySelector(".service-desc")?.textContent.trim() || ""
+          }));
+        } catch (_) {
+          services = fallbackServices;
+        }
+        saveServices(services);
+      }
+
+      loginShell.classList.add("admin-hidden");
+      adminDashboard.classList.add("open");
+      renderAdminServices();
+    }
+
+    function categoryLabel(category) {
+      const labels = {
+        hair: "Hair Services",
+        skin: "Skin Care",
+        beauty: "Beauty Services",
+        "hands-feet": "Hands & Feet",
+        bridal: "Bridal & Special"
+      };
+      return labels[category] || category;
+    }
+
+    function renderAdminServices() {
+      const services = getServices() || fallbackServices;
+      adminServicesBody.innerHTML = services.map((service) => `
+        <tr>
+          <td><strong>${escapeHtml(service.name)}</strong></td>
+          <td>${escapeHtml(categoryLabel(service.category))}</td>
+          <td>${escapeHtml(service.price)}</td>
+          <td>
+            <div class="admin-row-actions">
+              <button class="admin-action-btn edit" type="button" data-action="edit" data-id="${escapeHtml(service.id)}">Edit</button>
+              <button class="admin-action-btn delete" type="button" data-action="delete" data-id="${escapeHtml(service.id)}">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    adminServiceForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = serviceNameInput.value.trim();
+      const category = serviceCategoryInput.value;
+      const price = servicePriceInput.value.trim();
+      const description = serviceDescriptionInput.value.trim();
+      if (!name || !price) return;
+
+      let services = getServices() || fallbackServices.slice();
+      const existingId = adminServiceId.value;
+
+      if (existingId) {
+        services = services.map((service) => service.id === existingId
+          ? { ...service, name, category, price, description }
+          : service);
+      } else {
+        services.push({ id: makeServiceId(name), name, category, price, description });
+      }
+
+      saveServices(services);
+      resetAdminServiceForm();
+    });
+
+    function resetAdminServiceForm() {
+      adminServiceId.value = "";
+      adminServiceForm.reset();
+      serviceCategoryInput.value = "hair";
+      document.getElementById("admin-form-title").textContent = "Add New Service";
+      document.getElementById("admin-save-button").textContent = "Add Service";
+    }
+
+    document.getElementById("admin-reset-button").addEventListener("click", resetAdminServiceForm);
+
+    adminServicesBody.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+
+      const services = getServices() || fallbackServices.slice();
+      const service = services.find((item) => item.id === button.dataset.id);
+      if (!service) return;
+
+      if (button.dataset.action === "edit") {
+        adminServiceId.value = service.id;
+        serviceNameInput.value = service.name;
+        serviceCategoryInput.value = service.category;
+        servicePriceInput.value = service.price;
+        serviceDescriptionInput.value = service.description || "";
+        document.getElementById("admin-form-title").textContent = "Edit Service";
+        document.getElementById("admin-save-button").textContent = "Update Service";
+        serviceNameInput.focus();
+      }
+
+      if (button.dataset.action === "delete" && window.confirm(`Delete "${service.name}"?`)) {
+        saveServices(services.filter((item) => item.id !== service.id));
+        resetAdminServiceForm();
+      }
+    });
+
+    document.getElementById("admin-logout").addEventListener("click", () => {
+      adminDashboard.classList.remove("open");
+      loginShell.classList.remove("admin-hidden");
+      document.getElementById("login-password").value = "";
+      document.getElementById("login-message").textContent = "";
+    });
+  </script>
+</body>
+</html>
