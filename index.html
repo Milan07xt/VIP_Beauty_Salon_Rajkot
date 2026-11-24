@@ -312,7 +312,51 @@
         <div class="section-header text-center">
           <div class="section-tag">— Our Services —</div>
           <h2 class="section-title">Professional Beauty Services</h2>
-          <p class="section-subtitle">A complete range of hair, skin, beauty and bridal services under one roof.</p>
+          <p class="section-subtitle">A complete range of hair, skin, beauty and bridal services under one roof in Rajkot.</p>
+        </div>
+
+        <!-- Visual Category Explorer Cards -->
+        <div class="category-explorer-grid" role="tablist" aria-label="Browse services by category">
+          <button class="category-explorer-card active" data-category="hair" type="button" aria-selected="true">
+            <div class="cat-card-icon">✂️</div>
+            <div class="cat-card-body">
+              <h3 class="cat-card-title">Hair Services</h3>
+              <p class="cat-card-sub">Cut, Wash, Spa, Keratin & Colour</p>
+              <span class="cat-card-badge">8 Services · From ₹99</span>
+            </div>
+          </button>
+          <button class="category-explorer-card" data-category="skin" type="button" aria-selected="false">
+            <div class="cat-card-icon">🧴</div>
+            <div class="cat-card-body">
+              <h3 class="cat-card-title">Skin Care</h3>
+              <p class="cat-card-sub">Facials, Clean-up & D-Tan Glow</p>
+              <span class="cat-card-badge">7 Treatments · From ₹99</span>
+            </div>
+          </button>
+          <button class="category-explorer-card" data-category="beauty" type="button" aria-selected="false">
+            <div class="cat-card-icon">✨</div>
+            <div class="cat-card-body">
+              <h3 class="cat-card-title">Beauty Services</h3>
+              <p class="cat-card-sub">Waxing, Threading & Bleach</p>
+              <span class="cat-card-badge">7 Services · From ₹99</span>
+            </div>
+          </button>
+          <button class="category-explorer-card" data-category="hands-feet" type="button" aria-selected="false">
+            <div class="cat-card-icon">💅</div>
+            <div class="cat-card-body">
+              <h3 class="cat-card-title">Hands & Feet</h3>
+              <p class="cat-card-sub">Manicure, Pedicure & Nail Art</p>
+              <span class="cat-card-badge">5 Treatments · From ₹199</span>
+            </div>
+          </button>
+          <button class="category-explorer-card" data-category="bridal" type="button" aria-selected="false">
+            <div class="cat-card-icon">👰</div>
+            <div class="cat-card-body">
+              <h3 class="cat-card-title">Bridal & Special</h3>
+              <p class="cat-card-sub">HD Bridal Makeup & Packages</p>
+              <span class="cat-card-badge">5 Packages · Royal Care</span>
+            </div>
+          </button>
         </div>
 
         <!-- Category Tabs -->
@@ -332,6 +376,34 @@
           <button class="tab-btn" data-category="bridal" role="tab" aria-selected="false">
             <span class="tab-icon">👰</span> Bridal & Special
           </button>
+        </div>
+
+        <!-- Dynamic Category Spotlight Banner -->
+        <div class="category-spotlight" id="category-spotlight">
+          <div class="category-spotlight-inner">
+            <div class="category-spotlight-header">
+              <div class="category-spotlight-tag" id="spotlight-badge">VIP Hair Studio</div>
+              <h3 class="category-spotlight-title" id="spotlight-title">Hair Services — Precision Styling & Nourishment</h3>
+              <p class="category-spotlight-desc" id="spotlight-desc">
+                Transform your hair with Rajkot's leading hair styling and treatment experts. From personalized haircuts and deep-conditioning hair spa to ammonia-free global colouring and long-lasting keratin treatments, our certified stylists use premium Matrix and L'Oréal products to keep your hair healthy, silky, and voluminous.
+              </p>
+            </div>
+            <div class="category-spotlight-features" id="spotlight-features">
+              <span class="spotlight-feature-pill">✓ Matrix & L'Oréal Professional</span>
+              <span class="spotlight-feature-pill">✓ Certified Senior Stylists</span>
+              <span class="spotlight-feature-pill">✓ Ammonia-Free Colours</span>
+              <span class="spotlight-feature-pill">✓ Deep Damage Repair Therapies</span>
+            </div>
+            <div class="category-spotlight-actions">
+              <div class="spotlight-price-pill" id="spotlight-price">Starting at ₹99</div>
+              <button class="btn btn-gold btn-sm" id="spotlight-book-btn" onclick="openBookingModal('Hair Services')">
+                <span class="btn-icon">📅</span> Book Appointment
+              </button>
+              <a class="btn btn-whatsapp btn-sm" id="spotlight-wa-btn" target="_blank" rel="noopener" href="https://wa.me/919327600839?text=Hello%20VIP%20Beauty%20Salon!%20I%20would%20like%20to%20enquire%20about%20your%20Hair%20Services%20(Cut,%20Spa,%20Keratin,%20Colour).">
+                <span class="btn-icon">💬</span> WhatsApp Enquiry
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Services Grid -->
@@ -520,6 +592,34 @@
             </div>
           </div>
 
+          <div class="service-card" data-category="skin" style="display: none;">
+            <div class="service-img-wrap">
+              <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80" alt="Fruit Glow Facial at VIP Beauty Salon" loading="lazy">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Fruit Glow Facial</h3>
+              <p class="service-desc">Natural papaya and fruit extracts for instant skin hydration & natural glow.</p>
+              <div class="service-footer">
+                <span class="service-price">₹399</span>
+                <button class="btn btn-gold btn-sm" onclick="openBookingModal('Fruit Glow Facial')">Book Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-card" data-category="skin" style="display: none;">
+            <div class="service-img-wrap">
+              <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80" alt="Diamond Hydra Glow Facial at VIP Beauty Salon" loading="lazy">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Diamond Hydra Glow Facial</h3>
+              <p class="service-desc">Luxury derma deep hydration, collagen boost and luminous glass skin glow.</p>
+              <div class="service-footer">
+                <span class="service-price">₹899</span>
+                <button class="btn btn-gold btn-sm" onclick="openBookingModal('Diamond Hydra Glow Facial')">Book Now</button>
+              </div>
+            </div>
+          </div>
+
           <!-- BEAUTY SERVICES -->
           <div class="service-card" data-category="beauty" style="display: none;">
             <div class="service-img-wrap">
@@ -591,6 +691,34 @@
             </div>
           </div>
 
+          <div class="service-card" data-category="beauty" style="display: none;">
+            <div class="service-img-wrap">
+              <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80" alt="Full Arms and Underarms Waxing at VIP Beauty Salon" loading="lazy">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Full Arms & Underarms Waxing</h3>
+              <p class="service-desc">Ultra-hygienic strip waxing with soothing post-wax aloe vera cooling lotion.</p>
+              <div class="service-footer">
+                <span class="service-price">₹149</span>
+                <button class="btn btn-gold btn-sm" onclick="openBookingModal('Full Arms & Underarms Waxing')">Book Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-card" data-category="beauty" style="display: none;">
+            <div class="service-img-wrap">
+              <img src="https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80" alt="Full Legs Waxing at VIP Beauty Salon" loading="lazy">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Full Legs Waxing</h3>
+              <p class="service-desc">Smooth, gentle hair removal leaving your legs soft, silky and hydrated.</p>
+              <div class="service-footer">
+                <span class="service-price">₹249</span>
+                <button class="btn btn-gold btn-sm" onclick="openBookingModal('Full Legs Waxing')">Book Now</button>
+              </div>
+            </div>
+          </div>
+
           <!-- HANDS & FEET -->
           <div class="service-card" data-category="hands-feet" style="display: none;">
             <div class="service-img-wrap">
@@ -648,6 +776,20 @@
             </div>
           </div>
 
+          <div class="service-card" data-category="hands-feet" style="display: none;">
+            <div class="service-img-wrap">
+              <img src="https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80" alt="Paraffin Moisture Foot Spa at VIP Beauty Salon" loading="lazy">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Paraffin Moisture Foot Spa</h3>
+              <p class="service-desc">Warm therapeutic paraffin wax therapy for dry, cracked heels & silky soft feet.</p>
+              <div class="service-footer">
+                <span class="service-price">₹349</span>
+                <button class="btn btn-gold btn-sm" onclick="openBookingModal('Paraffin Moisture Foot Spa')">Book Now</button>
+              </div>
+            </div>
+          </div>
+
           <!-- BRIDAL & SPECIAL -->
           <div class="service-card" data-category="bridal" style="display: none;">
             <div class="service-img-wrap">
@@ -701,6 +843,20 @@
               <div class="service-footer">
                 <span class="service-price text-muted-gold">Contact for Price</span>
                 <button class="btn btn-gold btn-sm" onclick="openBookingModal('Special Packages')">Book Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-card" data-category="bridal" style="display: none;">
+            <div class="service-img-wrap">
+              <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=600&q=80" alt="Pre-Bridal Complete Glow Package at VIP Beauty Salon" loading="lazy">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Pre-Bridal Glow Package</h3>
+              <p class="service-desc">Multi-session full body waxing, deluxe facial, mani-pedi, body polish & hair spa.</p>
+              <div class="service-footer">
+                <span class="service-price">₹2,999</span>
+                <button class="btn btn-gold btn-sm" onclick="openBookingModal('Pre-Bridal Glow Package')">Book Now</button>
               </div>
             </div>
           </div>

@@ -38,7 +38,13 @@ window.VIP_IMAGE_MANIFEST = {
     { id: "service-23", name: "Bridal Makeup", category: "bridal", price: "Contact for Price", description: "HD luxury bridal makeover for your most cherished day." },
     { id: "service-24", name: "Party Makeup", category: "bridal", price: "Contact for Price", description: "Glamorous and long-lasting looks for parties and events." },
     { id: "service-25", name: "Hairstyling", category: "bridal", price: "Contact for Price", description: "Intricate updos, floral braids and curls." },
-    { id: "service-26", name: "Special Packages", category: "bridal", price: "Contact for Price", description: "Comprehensive pre-bridal and festive beauty packages." }
+    { id: "service-26", name: "Special Packages", category: "bridal", price: "Contact for Price", description: "Comprehensive pre-bridal and festive beauty packages." },
+    { id: "service-27", name: "Fruit Glow Facial", category: "skin", price: "₹399", description: "Natural papaya and fruit extracts for instant skin hydration & natural glow." },
+    { id: "service-28", name: "Diamond Hydra Glow Facial", category: "skin", price: "₹899", description: "Luxury derma deep hydration, collagen boost and luminous glass skin glow." },
+    { id: "service-29", name: "Full Arms & Underarms Waxing", category: "beauty", price: "₹149", description: "Ultra-hygienic strip waxing with soothing post-wax aloe vera cooling lotion." },
+    { id: "service-30", name: "Full Legs Waxing", category: "beauty", price: "₹249", description: "Smooth, gentle hair removal leaving your legs soft, silky and hydrated." },
+    { id: "service-31", name: "Paraffin Moisture Foot Spa", category: "hands-feet", price: "₹349", description: "Warm therapeutic paraffin wax therapy for dry, cracked heels & silky soft feet." },
+    { id: "service-32", name: "Pre-Bridal Glow Package", category: "bridal", price: "₹2,999", description: "Multi-session full body waxing, deluxe facial, mani-pedi, body polish & hair spa." }
   ],
   page: [
     ["https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80", "VIP Beauty Salon Bridal Makeover and Hair Styling in Rajkot"],

@@ -336,10 +336,16 @@ function initNavigation() {
 
   // Handle dropdown service links & tab switching on both desktop & mobile
   document.querySelectorAll('.dropdown-link, [data-filter]').forEach(link => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (e) => {
       const filter = link.getAttribute('data-filter');
       if (filter) {
         switchServiceTab(filter);
+        const servicesSection = document.getElementById('services');
+        if (servicesSection) {
+          e.preventDefault();
+          const targetY = servicesSection.getBoundingClientRect().top + window.pageYOffset - 88;
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
       }
       if (navLinks) {
         navLinks.classList.remove('open');
@@ -372,21 +378,112 @@ function initNavigation() {
 }
 
 /* ==========================================================================
-   SERVICE CATEGORY TABS
+   SERVICE CATEGORY TABS & SPOTLIGHT
    ========================================================================== */
+
+const categorySpotlightData = {
+  "hair": {
+    badge: "VIP Hair Studio",
+    title: "Hair Services — Precision Styling & Restorative Care",
+    desc: "Transform your hair with Rajkot's leading hair styling and treatment experts. From personalized haircuts and deep-conditioning hair spa to ammonia-free global colouring and long-lasting keratin treatments, our certified stylists use premium Matrix and L'Oréal products to keep your hair healthy, silky, and voluminous.",
+    features: [
+      "✓ Matrix & L'Oréal Professional",
+      "✓ Certified Senior Stylists",
+      "✓ Ammonia-Free Colours",
+      "✓ Deep Damage Repair Therapies"
+    ],
+    priceText: "Offers start from ₹99",
+    bookingService: "Hair Services",
+    waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Hair Services (Cut, Spa, Keratin, Colour)."
+  },
+  "skin": {
+    badge: "Skin Care Clinic",
+    title: "Skin Care — Radiant Facials & Deep Pore Clean-ups",
+    desc: "Restore your natural radiance with our customized dermatological and herbal skincare therapies. Whether you need immediate sun tan removal (D-Tan), gentle facial bleaching, or luxury 24K gold and diamond hydra facials, our specialists ensure gentle, hygienic, and long-lasting glow suited to all Indian skin types.",
+    features: [
+      "✓ Herbal & Fruit Glow Facials",
+      "✓ Instant D-Tan Sun Tan Removal",
+      "✓ Deep Pore Steam & Extraction",
+      "✓ 100% Sensitive-Skin Safe"
+    ],
+    priceText: "Treatments from ₹99",
+    bookingService: "Skin Care",
+    waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Skin Care treatments (Facials, D-Tan, Clean-up)."
+  },
+  "beauty": {
+    badge: "Essential Grooming",
+    title: "Beauty Services — Flawless Waxing, Threading & Bleach",
+    desc: "Flawless daily and event grooming performed with the highest hygiene standards. Experience precision eyebrow shaping contoured to your facial symmetry, virtually painless strip and cartridge waxing for arms and legs, and instant skin brightening bleach and shiner treatments that leave you feeling smooth and confident.",
+    features: [
+      "✓ Painless Eyebrow & Face Threading",
+      "✓ Hygienic Strip & Cartridge Waxing",
+      "✓ Instant Glow Bleach & Shiner",
+      "✓ 100% Sanitized & Disposable Tools"
+    ],
+    priceText: "Services from ₹99",
+    bookingService: "Beauty Services",
+    waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Beauty & Grooming Services (Waxing, Threading, Bleach)."
+  },
+  "hands-feet": {
+    badge: "Nail & Spa Lounge",
+    title: "Hands & Feet — Luxury Spa Manicure, Pedicure & Nail Art",
+    desc: "Give your hands and feet the royal VIP pampering they deserve. Indulge in aromatic soothing soaks, deep callus and dead skin buffing, relaxing reflexology massage, and creative nail styling with long-lasting gel polish and French tips. Designed to melt away stress while keeping your nails pristine.",
+    features: [
+      "✓ Deluxe Spa Manicure & Pedicure",
+      "✓ Dead Skin & Callus Removal",
+      "✓ Long-Lasting Gel & Polish",
+      "✓ Relaxing Foot Reflexology"
+    ],
+    priceText: "Treatments from ₹199",
+    bookingService: "Hands & Feet",
+    waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Hands & Feet treatments (Manicure, Pedicure, Nail Art)."
+  },
+  "bridal": {
+    badge: "Bridal Suite",
+    title: "Bridal & Special — HD Royal Bridal Makeover & Packages",
+    desc: "Your dream bridal look brought to life with elegance and perfection. Our senior bridal makeover artists create radiant, timeless, and camera-ready looks for your wedding, reception, sangeet, and festive celebrations. Using premium waterproof HD cosmetics and exquisite floral hairstyling, we ensure you shine on your most special day.",
+    features: [
+      "✓ HD & Waterproof Bridal Makeup",
+      "✓ Designer Hair Updos & Floral Draping",
+      "✓ Complete Pre-Bridal Glow Packages",
+      "✓ Customized Sangeet & Reception Looks"
+    ],
+    priceText: "Custom Bridal & Festive Packages",
+    bookingService: "Bridal & Special",
+    waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Bridal Makeover and Special Occasion packages."
+  }
+};
 
 function initServiceTabs() {
   const tabButtons = document.querySelectorAll('.service-tabs .tab-btn');
+  const explorerCards = document.querySelectorAll('.category-explorer-card');
+
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const category = btn.getAttribute('data-category');
       switchServiceTab(category);
     });
   });
+
+  explorerCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const category = card.getAttribute('data-category');
+      switchServiceTab(category);
+    });
+  });
+
+  // URL hash / parameter auto-activation
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  const validCategories = ['hair', 'skin', 'beauty', 'hands-feet', 'bridal'];
+  const matched = validCategories.find(c => hash.includes(c));
+  if (matched) {
+    switchServiceTab(matched);
+  }
 }
 
 function switchServiceTab(category) {
   const tabButtons = document.querySelectorAll('.service-tabs .tab-btn');
+  const explorerCards = document.querySelectorAll('.category-explorer-card');
   const serviceCards = document.querySelectorAll('.services-grid .service-card');
 
   // Update tabs state
@@ -395,6 +492,40 @@ function switchServiceTab(category) {
     b.classList.toggle('active', isTarget);
     b.setAttribute('aria-selected', String(isTarget));
   });
+
+  // Update explorer cards state
+  explorerCards.forEach(c => {
+    const isTarget = c.getAttribute('data-category') === category;
+    c.classList.toggle('active', isTarget);
+    c.setAttribute('aria-selected', String(isTarget));
+  });
+
+  // Update Spotlight Banner
+  const info = categorySpotlightData[category];
+  if (info) {
+    const badgeEl = document.getElementById('spotlight-badge');
+    const titleEl = document.getElementById('spotlight-title');
+    const descEl = document.getElementById('spotlight-desc');
+    const featuresEl = document.getElementById('spotlight-features');
+    const priceEl = document.getElementById('spotlight-price');
+    const bookBtn = document.getElementById('spotlight-book-btn');
+    const waBtn = document.getElementById('spotlight-wa-btn');
+
+    if (badgeEl) badgeEl.textContent = info.badge;
+    if (titleEl) titleEl.textContent = info.title;
+    if (descEl) descEl.textContent = info.desc;
+    if (priceEl) priceEl.textContent = info.priceText;
+    if (featuresEl) {
+      featuresEl.innerHTML = info.features.map(f => `<span class="spotlight-feature-pill">${f}</span>`).join('');
+    }
+    if (bookBtn) {
+      bookBtn.setAttribute('onclick', `openBookingModal('${info.bookingService}')`);
+    }
+    if (waBtn) {
+      const waUrl = `https://wa.me/919327600839?text=${encodeURIComponent(info.waMsg)}`;
+      waBtn.setAttribute('href', waUrl);
+    }
+  }
 
   // Filter service cards with fade effect
   serviceCards.forEach(card => {
