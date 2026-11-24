@@ -130,7 +130,7 @@ window.VIP_IMAGE_MANIFEST = {
     ["https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=700&q=80", "Book Appointment at VIP Beauty Salon Rajkot"],
     ["https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80", "Manicure and Pedicure offer at VIP Beauty Salon"],
     ["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80", "Keratin Treatment offer at VIP Beauty Salon"],
-    ["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80", "₹99 Beauty Services at VIP Beauty Salon"],
+    ["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80", "₹2000+ Beauty Services at VIP Beauty Salon"],
     ["https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=800&q=80", "Hair transformation at VIP Beauty Salon"],
     ["https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80", "Skin treatment before"],
     ["https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", "Skin treatment after"],

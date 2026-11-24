@@ -617,6 +617,7 @@
         <label class="sr-only" for="admin-section-select">Choose dashboard section</label>
         <select class="admin-section-select" id="admin-section-select">
           <option value="services-panel">Professional Beauty Services</option>
+          <option value="categories-panel">Our Services Categories (Hair, Skin, Beauty...)</option>
           <option value="offers-panel">Special Offers</option>
           <option value="gallery-panel">Our Gallery</option>
           <option value="images-panel">Website Images</option>
@@ -644,7 +645,7 @@
           </div>
           <div class="admin-field">
             <label for="admin-service-price">Price</label>
-            <input id="admin-service-price" type="text" placeholder="₹499 or Contact for Price" required>
+            <input id="admin-service-price" type="text" placeholder="₹2000+ or Contact for Price" required>
           </div>
           <div class="admin-field">
             <label for="admin-service-description">Description</label>
@@ -690,6 +691,65 @@
       </div>
       </section>
 
+      <section class="admin-content-section" id="categories-panel" aria-label="Category management" hidden>
+        <div class="admin-grid">
+          <form class="admin-panel" id="admin-category-form">
+            <h2 id="admin-category-form-title">Edit Service Category</h2>
+            <input id="admin-category-id" type="hidden">
+            <div class="admin-field">
+              <label for="admin-category-name">Category Name</label>
+              <input id="admin-category-name" type="text" placeholder="e.g. Hair Services" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-category-icon">Category Icon (Emoji)</label>
+              <input id="admin-category-icon" type="text" placeholder="e.g. ✂️" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-category-sub">Subtitle Summary</label>
+              <input id="admin-category-sub" type="text" placeholder="e.g. Cut, Wash, Spa, Keratin & Colour" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-category-badge">Explorer Card Badge</label>
+              <input id="admin-category-badge" type="text" placeholder="e.g. 8 Services · From ₹2000+" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-category-price">Spotlight Price Text</label>
+              <input id="admin-category-price" type="text" placeholder="e.g. Starting at ₹2000+" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-category-spotlight-badge">Spotlight Tag/Badge</label>
+              <input id="admin-category-spotlight-badge" type="text" placeholder="e.g. VIP Hair Studio" required>
+            </div>
+            <div class="admin-field">
+              <label for="admin-category-desc">Spotlight Detailed Description</label>
+              <textarea id="admin-category-desc" placeholder="Category description on website" rows="4" required></textarea>
+            </div>
+            <div class="admin-form-actions">
+              <button class="btn btn-gold btn-sm" type="submit" id="admin-category-submit">Update Category</button>
+              <button class="btn btn-outline-dark btn-sm" type="button" id="admin-category-reset">Reset</button>
+            </div>
+          </form>
+
+          <section class="admin-table-wrap" aria-labelledby="manage-categories-heading">
+            <h2 id="manage-categories-heading">Manage Services Categories</h2>
+            <p class="section-subtitle" id="admin-categories-count" style="margin-bottom:16px">Showing all 5 categories</p>
+            <div class="admin-table-scroll">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Icon</th>
+                    <th>Category</th>
+                    <th>Badge / Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-categories-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section class="admin-content-section" id="offers-panel" aria-label="Special offer management" hidden>
         <div class="admin-grid">
           <form class="admin-panel" id="admin-offer-form">
@@ -717,11 +777,11 @@
             </div>
             <div class="admin-field">
               <label for="admin-offer-price">Offer price</label>
-              <input id="admin-offer-price" type="text" placeholder="₹399" required>
+              <input id="admin-offer-price" type="text" placeholder="₹2,999" required>
             </div>
             <div class="admin-field">
               <label for="admin-offer-original-price">Original price (optional)</label>
-              <input id="admin-offer-original-price" type="text" placeholder="₹599">
+              <input id="admin-offer-original-price" type="text" placeholder="₹3,999">
             </div>
             <div class="admin-field">
               <label for="admin-offer-booking">Booking service name</label>
@@ -917,7 +977,7 @@
         items: [
           { name: "Manicure + Pedicure Special Offer", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80" },
           { name: "Keratin Treatment Special Offer", url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" },
-          { name: "₹99 Beauty Services Special", url: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80" }
+          { name: "₹2000+ Beauty Services Special", url: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80" }
         ]
       },
       {
@@ -1166,7 +1226,7 @@
     }
 
     function initializeServiceCatalog() {
-      const migrationKey = "vip_salon_services_catalog_v2";
+      const migrationKey = "vip_salon_services_catalog_v5";
       if (localStorage.getItem(migrationKey) === "true") return;
 
       try {
@@ -1182,7 +1242,9 @@
           if (!existing) return { ...defaultService };
 
           usedServices.add(existing);
-          return { ...defaultService, ...existing, id: existing.id || defaultService.id };
+          const priceNum = parseInt((existing.price || "").replace(/[^0-9]/g, ""), 10);
+          const price = (priceNum && priceNum < 2000) ? defaultService.price : (existing.price || defaultService.price);
+          return { ...defaultService, ...existing, price, id: existing.id || defaultService.id };
         });
 
         existingServices.forEach((service) => {
@@ -1195,6 +1257,183 @@
         notice.textContent = "Could not load or update the complete service list in browser storage.";
         notice.style.color = "#A83232";
       }
+    }
+
+    const fallbackCategories = window.VIP_IMAGE_MANIFEST.categories || [
+      {
+        id: "hair",
+        name: "Hair Services",
+        icon: "✂️",
+        sub: "Cut, Wash, Spa, Keratin & Colour",
+        badge: "8 Services · From ₹2000+",
+        price: "Starting at ₹2000+",
+        spotlightBadge: "VIP Hair Studio",
+        desc: "Transform your hair with Rajkot's leading hair styling and treatment experts. From personalized haircuts and deep-conditioning hair spa to ammonia-free global colouring and long-lasting keratin treatments, our certified stylists use premium Matrix and L'Oréal products to keep your hair healthy, silky, and voluminous."
+      },
+      {
+        id: "skin",
+        name: "Skin Care",
+        icon: "🧴",
+        sub: "Facials, Clean-up & D-Tan Glow",
+        badge: "7 Treatments · From ₹2000+",
+        price: "Starting at ₹2000+",
+        spotlightBadge: "Skin Care Clinic",
+        desc: "Restore your natural radiance with our customized dermatological and herbal skincare therapies. Whether you need immediate sun tan removal (D-Tan), gentle facial bleaching, or luxury 24K gold and diamond hydra facials, our specialists ensure gentle, hygienic, and long-lasting glow suited to all Indian skin types."
+      },
+      {
+        id: "beauty",
+        name: "Beauty Services",
+        icon: "✨",
+        sub: "Waxing, Threading & Bleach",
+        badge: "7 Services · From ₹2000+",
+        price: "Starting at ₹2000+",
+        spotlightBadge: "Essential Grooming",
+        desc: "Flawless daily and event grooming performed with the highest hygiene standards. Experience precision eyebrow shaping contoured to your facial symmetry, virtually painless strip and cartridge waxing for arms and legs, and instant skin brightening bleach and shiner treatments that leave you feeling smooth and confident."
+      },
+      {
+        id: "hands-feet",
+        name: "Hands & Feet",
+        icon: "💅",
+        sub: "Manicure, Pedicure & Nail Art",
+        badge: "5 Treatments · From ₹2000+",
+        price: "Starting at ₹2000+",
+        spotlightBadge: "Nail & Spa Lounge",
+        desc: "Give your hands and feet the royal VIP pampering they deserve. Indulge in aromatic soothing soaks, deep callus and dead skin buffing, relaxing reflexology massage, and creative nail styling with long-lasting gel polish and French tips. Designed to melt away stress while keeping your nails pristine."
+      },
+      {
+        id: "bridal",
+        name: "Bridal & Special",
+        icon: "👰",
+        sub: "HD Bridal Makeup & Packages",
+        badge: "5 Packages · From ₹2000+",
+        price: "Starting at ₹2000+",
+        spotlightBadge: "Bridal Suite",
+        desc: "Your dream bridal look brought to life with elegance and perfection. Our senior bridal makeover artists create radiant, timeless, and camera-ready looks for your wedding, reception, sangeet, and festive celebrations. Using premium waterproof HD cosmetics and exquisite floral hairstyling, we ensure you shine on your most special day."
+      }
+    ];
+
+    function getCategories() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("vip_salon_categories") || "null");
+        return Array.isArray(saved) && saved.length ? saved : fallbackCategories.slice();
+      } catch (_) {
+        return fallbackCategories.slice();
+      }
+    }
+
+    function saveCategories(categories) {
+      try {
+        localStorage.setItem("vip_salon_categories", JSON.stringify(categories));
+        renderCategories();
+        notice.textContent = "Service categories saved successfully.";
+        notice.style.color = "#A88421";
+      } catch (_) {
+        notice.textContent = "Could not save categories to browser storage.";
+        notice.style.color = "#A83232";
+      }
+    }
+
+    function renderCategories() {
+      const categories = getCategories();
+      const countEl = document.getElementById("admin-categories-count");
+      const bodyEl = document.getElementById("admin-categories-body");
+      if (countEl) countEl.textContent = `Showing all ${categories.length} categories`;
+      if (!bodyEl) return;
+
+      bodyEl.innerHTML = categories.map((cat) => `
+        <tr>
+          <td><span style="font-size: 22px;">${escapeHtml(cat.icon || "✨")}</span></td>
+          <td>
+            <strong>${escapeHtml(cat.name)}</strong>
+            <div style="font-size: 12px; color: #777;">${escapeHtml(cat.sub || "")}</div>
+          </td>
+          <td>
+            <span style="display:inline-block; font-size: 12px; font-weight:700; color:#7A5B0B; background:rgba(212,175,55,0.14); padding:3px 8px; border-radius:12px;">
+              ${escapeHtml(cat.badge || cat.price || "From ₹2000+")}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-outline-dark btn-sm admin-action-btn" type="button" data-action="edit-category" data-id="${escapeHtml(cat.id)}">Edit</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    const categoryForm = document.getElementById("admin-category-form");
+    const categoryResetBtn = document.getElementById("admin-category-reset");
+    const categoryIdInput = document.getElementById("admin-category-id");
+    const categoryNameInput = document.getElementById("admin-category-name");
+    const categoryIconInput = document.getElementById("admin-category-icon");
+    const categorySubInput = document.getElementById("admin-category-sub");
+    const categoryBadgeInput = document.getElementById("admin-category-badge");
+    const categoryPriceInput = document.getElementById("admin-category-price");
+    const categorySpotlightBadgeInput = document.getElementById("admin-category-spotlight-badge");
+    const categoryDescInput = document.getElementById("admin-category-desc");
+
+    function resetCategoryForm() {
+      if (!categoryForm) return;
+      categoryForm.reset();
+      categoryIdInput.value = "";
+      document.getElementById("admin-category-form-title").textContent = "Edit Service Category";
+      document.getElementById("admin-category-submit").textContent = "Update Category";
+    }
+
+    if (categoryForm) {
+      categoryForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const catId = categoryIdInput.value.trim() || categoryNameInput.value.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        const categories = getCategories();
+        const existingIndex = categories.findIndex(c => c.id === catId);
+
+        const categoryData = {
+          id: catId,
+          name: categoryNameInput.value.trim(),
+          icon: categoryIconInput.value.trim() || "✨",
+          sub: categorySubInput.value.trim(),
+          badge: categoryBadgeInput.value.trim(),
+          price: categoryPriceInput.value.trim(),
+          spotlightBadge: categorySpotlightBadgeInput.value.trim(),
+          desc: categoryDescInput.value.trim()
+        };
+
+        if (existingIndex >= 0) {
+          categories[existingIndex] = { ...categories[existingIndex], ...categoryData };
+        } else {
+          categories.push(categoryData);
+        }
+
+        saveCategories(categories);
+        resetCategoryForm();
+      });
+    }
+
+    if (categoryResetBtn) {
+      categoryResetBtn.addEventListener("click", resetCategoryForm);
+    }
+
+    const categoriesBody = document.getElementById("admin-categories-body");
+    if (categoriesBody) {
+      categoriesBody.addEventListener("click", (e) => {
+        const btn = e.target.closest('button[data-action="edit-category"]');
+        if (!btn) return;
+        const catId = btn.dataset.id;
+        const categories = getCategories();
+        const cat = categories.find(c => c.id === catId);
+        if (!cat) return;
+
+        categoryIdInput.value = cat.id;
+        categoryNameInput.value = cat.name || "";
+        categoryIconInput.value = cat.icon || "";
+        categorySubInput.value = cat.sub || "";
+        categoryBadgeInput.value = cat.badge || "";
+        categoryPriceInput.value = cat.price || "";
+        categorySpotlightBadgeInput.value = cat.spotlightBadge || "";
+        categoryDescInput.value = cat.desc || "";
+
+        document.getElementById("admin-category-form-title").textContent = `Edit Category: ${cat.name}`;
+        document.getElementById("admin-category-submit").textContent = "Save Changes";
+        categoryNameInput.focus();
+      });
     }
 
     function escapeHtml(value) {
@@ -1242,7 +1481,32 @@
     }
 
     function getOffers() {
-      return readManagedList("vip_salon_offers", window.VIP_IMAGE_MANIFEST.offers);
+      const defaults = window.VIP_IMAGE_MANIFEST.offers;
+      let offers = readManagedList("vip_salon_offers", defaults);
+      const migrationKey = "vip_salon_offers_catalog_v5";
+      if (localStorage.getItem(migrationKey) !== "true") {
+        let updated = false;
+        offers = offers.map(offer => {
+          const priceNum = parseInt((offer.price || "").replace(/[^0-9]/g, ""), 10);
+          if (priceNum && priceNum < 2000) {
+            const def = defaults.find(d => d.id === offer.id || d.title === offer.title);
+            if (def) {
+              updated = true;
+              return { ...offer, price: def.price, originalPrice: def.originalPrice };
+            }
+          }
+          return offer;
+        });
+        if (updated) {
+          try {
+            localStorage.setItem("vip_salon_offers", JSON.stringify(offers));
+          } catch (_) {}
+        }
+        try {
+          localStorage.setItem(migrationKey, "true");
+        } catch (_) {}
+      }
+      return offers;
     }
 
     function getGalleryItems() {
@@ -1843,10 +2107,12 @@
     // Initial setup on page load
     initializeServiceCatalog();
     resetForm();
+    resetCategoryForm();
     resetOfferForm();
     resetGalleryForm();
     resetImageForm();
     renderServices();
+    renderCategories();
     renderOffers();
     renderGalleryItems();
     loadImageCatalog();

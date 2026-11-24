@@ -34,6 +34,27 @@ function syncManagedServices() {
   }
   if (!Array.isArray(services)) return;
 
+  // Auto-upgrade any obsolete budget pricing (< 2000) to luxury 2000+ manifest standards
+  let updatedPricing = false;
+  services = services.map(service => {
+    const priceNum = parseInt((service.price || "").replace(/[^0-9]/g, ""), 10);
+    if (priceNum && priceNum < 2000) {
+      const manifestDef = (window.VIP_IMAGE_MANIFEST && window.VIP_IMAGE_MANIFEST.services)
+        ? window.VIP_IMAGE_MANIFEST.services.find(s => s.name === service.name || s.id === service.id)
+        : null;
+      if (manifestDef) {
+        updatedPricing = true;
+        return { ...service, price: manifestDef.price };
+      }
+    }
+    return service;
+  });
+  if (updatedPricing) {
+    try {
+      localStorage.setItem("vip_salon_services", JSON.stringify(services));
+    } catch (_) {}
+  }
+
   const grid = document.getElementById("services-grid");
   if (!grid) return;
 
@@ -177,7 +198,27 @@ function readManagedContent(key) {
 }
 
 function syncManagedOffers() {
-  const offers = readManagedContent("vip_salon_offers");
+  let offers = readManagedContent("vip_salon_offers");
+  const defaults = window.VIP_IMAGE_MANIFEST ? window.VIP_IMAGE_MANIFEST.offers : null;
+  if (offers && defaults) {
+    let updatedOffers = false;
+    offers = offers.map(offer => {
+      const priceNum = parseInt((offer.price || "").replace(/[^0-9]/g, ""), 10);
+      if (priceNum && priceNum < 2000) {
+        const def = defaults.find(d => d.id === offer.id || d.title === offer.title);
+        if (def) {
+          updatedOffers = true;
+          return { ...offer, price: def.price, originalPrice: def.originalPrice };
+        }
+      }
+      return offer;
+    });
+    if (updatedOffers) {
+      try {
+        localStorage.setItem("vip_salon_offers", JSON.stringify(offers));
+      } catch (_) {}
+    }
+  }
   const grid = document.querySelector(".offers-grid");
   if (!offers || !grid) return;
 
@@ -392,7 +433,7 @@ const categorySpotlightData = {
       "✓ Ammonia-Free Colours",
       "✓ Deep Damage Repair Therapies"
     ],
-    priceText: "Offers start from ₹99",
+    priceText: "Starting at ₹2000+",
     bookingService: "Hair Services",
     waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Hair Services (Cut, Spa, Keratin, Colour)."
   },
@@ -406,7 +447,7 @@ const categorySpotlightData = {
       "✓ Deep Pore Steam & Extraction",
       "✓ 100% Sensitive-Skin Safe"
     ],
-    priceText: "Treatments from ₹99",
+    priceText: "Starting at ₹2000+",
     bookingService: "Skin Care",
     waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Skin Care treatments (Facials, D-Tan, Clean-up)."
   },
@@ -420,7 +461,7 @@ const categorySpotlightData = {
       "✓ Instant Glow Bleach & Shiner",
       "✓ 100% Sanitized & Disposable Tools"
     ],
-    priceText: "Services from ₹99",
+    priceText: "Starting at ₹2000+",
     bookingService: "Beauty Services",
     waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Beauty & Grooming Services (Waxing, Threading, Bleach)."
   },
@@ -434,7 +475,7 @@ const categorySpotlightData = {
       "✓ Long-Lasting Gel & Polish",
       "✓ Relaxing Foot Reflexology"
     ],
-    priceText: "Treatments from ₹199",
+    priceText: "Starting at ₹2000+",
     bookingService: "Hands & Feet",
     waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Hands & Feet treatments (Manicure, Pedicure, Nail Art)."
   },
@@ -448,7 +489,7 @@ const categorySpotlightData = {
       "✓ Complete Pre-Bridal Glow Packages",
       "✓ Customized Sangeet & Reception Looks"
     ],
-    priceText: "Custom Bridal & Festive Packages",
+    priceText: "Starting at ₹2000+",
     bookingService: "Bridal & Special",
     waMsg: "Hello VIP Beauty Salon! I would like to enquire about your Bridal Makeover and Special Occasion packages."
   }
@@ -457,6 +498,40 @@ const categorySpotlightData = {
 function initServiceTabs() {
   const tabButtons = document.querySelectorAll('.service-tabs .tab-btn');
   const explorerCards = document.querySelectorAll('.category-explorer-card');
+
+  // Sync custom categories from admin dashboard storage
+  try {
+    const savedCats = JSON.parse(localStorage.getItem("vip_salon_categories") || "null");
+    if (Array.isArray(savedCats) && savedCats.length) {
+      savedCats.forEach(cat => {
+        const card = document.querySelector(`.category-explorer-card[data-category="${cat.id}"]`);
+        if (card) {
+          if (cat.icon) {
+            const iconEl = card.querySelector('.cat-card-icon');
+            if (iconEl) iconEl.textContent = cat.icon;
+          }
+          if (cat.name) {
+            const titleEl = card.querySelector('.cat-card-title');
+            if (titleEl) titleEl.textContent = cat.name;
+          }
+          if (cat.sub) {
+            const subEl = card.querySelector('.cat-card-sub');
+            if (subEl) subEl.textContent = cat.sub;
+          }
+          if (cat.badge) {
+            const badgeEl = card.querySelector('.cat-card-badge');
+            if (badgeEl) badgeEl.textContent = cat.badge;
+          }
+        }
+        if (categorySpotlightData[cat.id]) {
+          if (cat.spotlightBadge) categorySpotlightData[cat.id].badge = cat.spotlightBadge;
+          if (cat.price) categorySpotlightData[cat.id].priceText = cat.price;
+          if (cat.desc) categorySpotlightData[cat.id].desc = cat.desc;
+          if (cat.name) categorySpotlightData[cat.id].title = `${cat.name} — Luxury Salon Care`;
+        }
+      });
+    }
+  } catch (_) {}
 
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {

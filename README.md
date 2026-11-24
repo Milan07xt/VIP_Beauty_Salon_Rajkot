@@ -35,7 +35,7 @@ A luxury, fully responsive salon website for **VIP Beauty Salon**, Raiya Road, R
 
 4. **Professional Services (Interactive Category Menu)**
    - Filter tabs: `✂️ Hair Services`, `🧴 Skin Care`, `✨ Beauty Services`, `💅 Hands & Feet`, `👰 Bridal & Special`.
-   - Retains all verified confirmed prices (₹99 services, ₹199 haircuts, ₹499 hair spa, ₹599 keratin, ₹399 manicure + pedicure combo).
+   - Luxury salon pricing structure with verified services starting from ₹2,000+ (hair cuts, premium treatments, spa, facials, bridal packages).
    - "Book Now" buttons on every card that launch the booking wizard with that service pre-selected.
 
 5. **Online Appointment Booking System (5-Step Wizard)**
@@ -47,9 +47,9 @@ A luxury, fully responsive salon website for **VIP Beauty Salon**, Raiya Road, R
    - All booking requests are stored in `localStorage` for salon reception review.
 
 6. **Special Offers**
-   - Manicure + Pedicure Special: ₹399 (Original ₹599) [Limited Offer].
-   - Keratin Treatment: ₹599 (Original ₹999) [Most Popular].
-   - Selected Services starting at ₹99 [Starting at].
+   - Manicure + Pedicure Special: ₹2,999 (Original ₹3,999) [Limited Offer].
+   - Keratin Treatment: ₹4,999 (Original ₹6,999) [Most Popular].
+   - Selected Services starting at ₹2,000+ [Starting at].
 
 7. **Our Gallery with Interactive Lightbox**
    - Filter pills: `All`, `Hair`, `Skin`, `Bridal`, `Beauty`, `Salon Interior`.
