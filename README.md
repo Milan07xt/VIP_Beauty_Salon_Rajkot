@@ -76,7 +76,7 @@ A luxury, fully responsive salon website for **VIP Beauty Salon**, Raiya Road, R
     - Persistent circular green WhatsApp button with pulsating glow effect and pre-filled message.
 
 12. **Admin Dashboard**
-    - Accessible after selecting Admin on `login.html` and signing in.
+    - Accessible after selecting Admin on `login.html` and signing in (Username: `@Vip_Beauty_Parlour`, Password: `Vip@2006`).
     - Add, update, and delete services, prices, and descriptions.
     - Preview, update, delete, or restore website and gallery images.
     - Content changes are stored in the browser's `localStorage` and appear on the public site in that same browser and origin.

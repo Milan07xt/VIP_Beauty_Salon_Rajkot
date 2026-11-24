@@ -553,8 +553,8 @@
     const passwordToggle = document.getElementById("password-toggle");
     const roleButtons = document.querySelectorAll(".login-role-button");
     let selectedRole = "customer";
-    const adminUsername = "admin";
-    const adminPassword = "Admin@123";
+    const adminAllowedUsernames = ["@vip_beauty_parlour", "vip_beauty_parlour", "admin"];
+    const adminPassword = "Vip@2006";
 
     passwordToggle.addEventListener("click", () => {
       const showPassword = passwordInput.type === "password";
@@ -563,27 +563,42 @@
       passwordToggle.setAttribute("aria-label", showPassword ? "Hide password" : "Show password");
     });
 
+    function updateRoleUI(role) {
+      selectedRole = role;
+      roleButtons.forEach((roleButton) => {
+        const active = roleButton.dataset.role === role;
+        roleButton.classList.toggle("active", active);
+        roleButton.setAttribute("aria-selected", String(active));
+      });
+
+      const isAdmin = role === "admin";
+      document.getElementById("login-tag").textContent = isAdmin ? "Admin Access" : "Customer Login";
+      document.getElementById("login-heading").textContent = isAdmin ? "Admin portal" : "Welcome back";
+      document.getElementById("brand-portal-title").textContent = isAdmin ? "Admin Portal" : "Customer Portal";
+      document.getElementById("brand-portal-copy").textContent = isAdmin
+        ? "Manage appointments, customer bookings and salon operations."
+        : "View appointments, manage bookings and enjoy your VIP salon experience.";
+
+      const emailLabel = document.querySelector('label[for="login-email"]');
+      const emailInput = document.getElementById("login-email");
+      if (emailLabel) emailLabel.textContent = isAdmin ? "Admin Username" : "Email or phone";
+      if (emailInput) {
+        emailInput.placeholder = isAdmin ? "Enter username (@Vip_Beauty_Parlour)" : "Enter email or phone";
+      }
+      document.getElementById("login-message").textContent = "";
+      passwordInput.value = "";
+    }
+
     roleButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        selectedRole = button.dataset.role;
-
-        roleButtons.forEach((roleButton) => {
-          const active = roleButton === button;
-          roleButton.classList.toggle("active", active);
-          roleButton.setAttribute("aria-selected", String(active));
-        });
-
-        const isAdmin = selectedRole === "admin";
-        document.getElementById("login-tag").textContent = isAdmin ? "Admin Access" : "Customer Login";
-        document.getElementById("login-heading").textContent = isAdmin ? "Admin portal" : "Welcome back";
-        document.getElementById("brand-portal-title").textContent = isAdmin ? "Admin Portal" : "Customer Portal";
-        document.getElementById("brand-portal-copy").textContent = isAdmin
-          ? "Manage appointments, customer bookings and salon operations."
-          : "View appointments, manage bookings and enjoy your VIP salon experience.";
-        document.getElementById("login-message").textContent = "";
-        passwordInput.value = "";
+        updateRoleUI(button.dataset.role);
       });
     });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("role") === "admin" || window.location.hash === "#admin") {
+      updateRoleUI("admin");
+    }
 
     document.getElementById("login-form").addEventListener("submit", (event) => {
       event.preventDefault();
@@ -598,7 +613,9 @@
 
       message.style.color = "#A88421";
       if (selectedRole === "admin") {
-        if (login.toLowerCase() !== adminUsername || password !== adminPassword) {
+        const enteredUsername = login.toLowerCase();
+        const enteredPassword = password.trim();
+        if (!adminAllowedUsernames.includes(enteredUsername) || enteredPassword !== adminPassword) {
           message.style.color = "#A83232";
           message.textContent = "Invalid admin username or password.";
           return;
